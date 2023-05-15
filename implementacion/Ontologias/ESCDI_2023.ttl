@@ -1,0 +1,432 @@
+@prefix : <http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/> .
+
+<http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023> rdf:type owl:Ontology .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#contiene
+:contiene rdf:type owl:ObjectProperty ;
+          owl:inverseOf :perteneceA ;
+          rdfs:domain :PaqueteDeViaje ;
+          rdfs:range :Actividad ,
+                     :Alojamiento ,
+                     :MedioDeTransporte .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#correspondeA
+:correspondeA rdf:type owl:ObjectProperty ;
+              rdfs:domain :ValoracionActividad ,
+                          :ValoracionAlojamiento ,
+                          :ValoracionMedioDeTransporte ;
+              rdfs:range :Actividad ,
+                         :Alojamiento ,
+                         :MedioDeTransporte .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#correspondenA
+:correspondenA rdf:type owl:ObjectProperty ;
+               rdfs:domain :PeticionActividadesViaje ,
+                           :PeticionAlojamientoViaje ,
+                           :PeticionMedioDeTransporteViaje ;
+               rdfs:range :PeticionDeViaje .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#esPropiedadDe
+:esPropiedadDe rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf owl:topObjectProperty ;
+               owl:inverseOf :propietarioDe ;
+               rdfs:domain :PaqueteDeViaje ;
+               rdfs:range :Usuario .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#esRealizadaPor
+:esRealizadaPor rdf:type owl:ObjectProperty ;
+                rdfs:domain :Usuario ;
+                rdfs:range :PeticionDeViaje .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#perteneceA
+:perteneceA rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf owl:topObjectProperty ;
+            rdfs:domain :Actividad ,
+                        :Alojamiento ,
+                        :MedioDeTransporte ;
+            rdfs:range :PaqueteDeViaje .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#propietarioDe
+:propietarioDe rdf:type owl:ObjectProperty ;
+               rdfs:subPropertyOf owl:topObjectProperty ;
+               rdfs:domain :Usuario ;
+               rdfs:range :PaqueteDeViaje .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#seEncuentraEn
+:seEncuentraEn rdf:type owl:ObjectProperty ;
+               rdfs:domain :Alojamiento ;
+               rdfs:range :Localidad .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#seHaObtenidoDe
+:seHaObtenidoDe rdf:type owl:ObjectProperty ;
+                rdfs:domain :EncuestaDeSatisfaccion ,
+                            :Usuario ;
+                rdfs:range :Valoracion .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#sePreguntaEn
+:sePreguntaEn rdf:type owl:ObjectProperty ;
+              rdfs:domain :Peticion ;
+              rdfs:range :Localidad .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#seRealizaEn
+:seRealizaEn rdf:type owl:ObjectProperty ;
+             rdfs:domain :Actividad ,
+                         :PaqueteDeViaje ;
+             rdfs:range :Localidad .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#medioIda/Vuelta
+<http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#medioIda/Vuelta> rdf:type owl:ObjectProperty ;
+                                                                                     rdfs:domain :MedioDeTransporte ;
+                                                                                     rdfs:range :Localidad .
+
+
+###  http://www.w3.org/2002/07/owl#topObjectProperty
+owl:topObjectProperty rdfs:domain :Usuario ;
+                      rdfs:range :Valoracion .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#FechaHora
+:FechaHora rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#FechaHoraLlegada
+:FechaHoraLlegada rdf:type owl:DatatypeProperty ;
+                  rdfs:subPropertyOf :FechaHora ;
+                  rdfs:domain :Alojamiento ,
+                              :MedioDeTransporteIda ,
+                              :PaqueteDeViaje ,
+                              :PeticionAlojamientoViaje ,
+                              :PeticionDeViaje ,
+                              :PeticionMedioDeTransporteViaje ;
+                  rdfs:range xsd:dateTime ;
+                  owl:propertyDisjointWith :FechaHoraVuelta .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#FechaHoraVuelta
+:FechaHoraVuelta rdf:type owl:DatatypeProperty ;
+                 rdfs:subPropertyOf :FechaHora ;
+                 rdfs:domain :Alojamiento ,
+                             :MedioDeTransporteVuelta ,
+                             :PaqueteDeViaje ,
+                             :PeticionAlojamientoViaje ,
+                             :PeticionDeViaje ,
+                             :PeticionMedioDeTransporteViaje ;
+                 rdfs:range xsd:dateTime .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#IdUsuario
+:IdUsuario rdf:type owl:DatatypeProperty ;
+           rdfs:domain :Usuario ;
+           rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#MomentoDelDia
+:MomentoDelDia rdf:type owl:DatatypeProperty ;
+               rdfs:domain :Actividad ;
+               rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#Precio
+:Precio rdf:type owl:DatatypeProperty ;
+        rdfs:domain :Alojamiento ,
+                    :MedioDeTransporte ,
+                    :PaqueteDeViaje ;
+        rdfs:range xsd:positiveInteger .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#Pregunta
+:Pregunta rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#PreguntaActividad
+:PreguntaActividad rdf:type owl:DatatypeProperty ;
+                   rdfs:subPropertyOf :Pregunta ;
+                   rdfs:domain :EncuestaDeSatisfaccion ;
+                   rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#PreguntaAlojamiento
+:PreguntaAlojamiento rdf:type owl:DatatypeProperty ;
+                     rdfs:subPropertyOf :Pregunta ;
+                     rdfs:domain :EncuestaDeSatisfaccion ;
+                     rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#PreguntaMedioDeTransporte
+:PreguntaMedioDeTransporte rdf:type owl:DatatypeProperty ;
+                           rdfs:subPropertyOf :Pregunta ;
+                           rdfs:domain :EncuestaDeSatisfaccion ;
+                           rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#PreguntaViaje
+:PreguntaViaje rdf:type owl:DatatypeProperty ;
+               rdfs:subPropertyOf :Pregunta ;
+               rdfs:domain :EncuestaDeSatisfaccion ;
+               rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#Presupuesto
+:Presupuesto rdf:type owl:DatatypeProperty ;
+             rdfs:domain :PeticionAlojamientoViaje ,
+                         :PeticionDeViaje ,
+                         :PeticionMedioDeTransporteViaje ;
+             rdfs:range xsd:positiveInteger .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#ProporcionActividades
+:ProporcionActividades rdf:type owl:DatatypeProperty .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#ProporcionActividadesCulturales
+:ProporcionActividadesCulturales rdf:type owl:DatatypeProperty ;
+                                 rdfs:subPropertyOf :ProporcionActividades ;
+                                 rdfs:domain :PeticionActividadesViaje ;
+                                 rdfs:range [ rdf:type rdfs:Datatype ;
+                                              owl:onDatatype xsd:double ;
+                                              owl:withRestrictions ( [ xsd:minInclusive "0.0"^^xsd:double
+                                                                     ]
+                                                                     [ xsd:maxInclusive "100.0"^^xsd:double
+                                                                     ]
+                                                                   )
+                                            ] .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#ProporcionActividadesFestivas
+:ProporcionActividadesFestivas rdf:type owl:DatatypeProperty ;
+                               rdfs:subPropertyOf :ProporcionActividades ;
+                               rdfs:domain :PeticionActividadesViaje ;
+                               rdfs:range [ rdf:type rdfs:Datatype ;
+                                            owl:onDatatype xsd:double ;
+                                            owl:withRestrictions ( [ xsd:minInclusive "0.0"^^xsd:double
+                                                                   ]
+                                                                   [ xsd:maxInclusive "100.0"^^xsd:double
+                                                                   ]
+                                                                 )
+                                          ] .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#ProporcionActividadesLudicas
+:ProporcionActividadesLudicas rdf:type owl:DatatypeProperty ;
+                              rdfs:subPropertyOf :ProporcionActividades ;
+                              rdfs:domain :PeticionActividadesViaje ;
+                              rdfs:range [ rdf:type rdfs:Datatype ;
+                                           owl:onDatatype xsd:double ;
+                                           owl:withRestrictions ( [ xsd:minInclusive "0.0"^^xsd:double
+                                                                  ]
+                                                                  [ xsd:maxInclusive "100.0"^^xsd:double
+                                                                  ]
+                                                                )
+                                         ] .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#Puntuacion
+:Puntuacion rdf:type owl:DatatypeProperty ;
+            rdfs:subPropertyOf owl:topDataProperty ;
+            rdfs:domain :Valoracion ;
+            rdfs:range [ rdf:type rdfs:Datatype ;
+                         owl:onDatatype xsd:double ;
+                         owl:withRestrictions ( [ xsd:minInclusive "0.0"^^xsd:double
+                                                ]
+                                                [ xsd:maxInclusive "5.0"^^xsd:double
+                                                ]
+                                              )
+                       ] .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#Actividad
+:Actividad rdf:type owl:Class ;
+           rdfs:comment "Se trata de una Actividad de entre muchas de un Paquete de Viaje. Se centra en una Localidad y un momento del dia (Mañana, Tarde, Noche)." .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#ActividadCultural
+:ActividadCultural rdf:type owl:Class ;
+                   rdfs:subClassOf :Actividad .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#ActividadFestiva
+:ActividadFestiva rdf:type owl:Class ;
+                  rdfs:subClassOf :Actividad .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#ActividadLudica
+:ActividadLudica rdf:type owl:Class ;
+                 rdfs:subClassOf :Actividad .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#Alojamiento
+:Alojamiento rdf:type owl:Class ;
+             rdfs:comment "Se trata de una estancia donde el propietario dormiría durante su viaje." .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#AlojamientoAfueras
+:AlojamientoAfueras rdf:type owl:Class ;
+                    rdfs:subClassOf :Alojamiento ;
+                    owl:disjointWith :AlojamientoCentrico .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#AlojamientoCentrico
+:AlojamientoCentrico rdf:type owl:Class ;
+                     rdfs:subClassOf :Alojamiento .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#EncuestaDeSatisfaccion
+:EncuestaDeSatisfaccion rdf:type owl:Class ;
+                        rdfs:comment "Classe que representa un intento de obtener las valoraciones de un usuario" .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#Localidad
+:Localidad rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#MedioDeTransporte
+:MedioDeTransporte rdf:type owl:Class ;
+                   rdfs:comment "Se trata del medio a través del cual el usuario se desplazaria a la localidad del viaje." .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#MedioDeTransporteIda
+:MedioDeTransporteIda rdf:type owl:Class ;
+                      rdfs:subClassOf :MedioDeTransporte ;
+                      owl:disjointWith :MedioDeTransporteVuelta .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#MedioDeTransporteVuelta
+:MedioDeTransporteVuelta rdf:type owl:Class ;
+                         rdfs:subClassOf :MedioDeTransporte .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#PaqueteDeViaje
+:PaqueteDeViaje rdf:type owl:Class ;
+                rdfs:comment "Objeto que contiene toda la información rellevante con un viaje (localidad, fechas, Actividades, Alojamiento, etc.)." .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#Peticion
+:Peticion rdf:type owl:Class ;
+          rdfs:comment "Se trata de una petición de datos relacionados con Viajes, Actividades, etc." .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#PeticionActividadesViaje
+:PeticionActividadesViaje rdf:type owl:Class ;
+                          rdfs:subClassOf :Peticion ;
+                          rdfs:comment "Se trata de una petición de datos relacionada con las Actividades de un Paquete." .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#PeticionAlojamientoViaje
+:PeticionAlojamientoViaje rdf:type owl:Class ;
+                          rdfs:subClassOf :Peticion ;
+                          rdfs:comment "Se trata de una petición de datos relacionada con el Alojamiento de un Paquete." .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#PeticionDeViaje
+:PeticionDeViaje rdf:type owl:Class ;
+                 rdfs:subClassOf :Peticion ;
+                 rdfs:comment "Se trata de una petición de datos relacionada con un nuevo  Paquete de Viaje de un Usuario." .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#PeticionMedioDeTransporteViaje
+:PeticionMedioDeTransporteViaje rdf:type owl:Class ;
+                                rdfs:subClassOf :Peticion ;
+                                rdfs:comment "Se trata de una petición de datos relacionada con el Medio de Transporte de un Paquete." .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#PreferenciaActividades
+:PreferenciaActividades rdf:type owl:Class ;
+                        rdfs:subClassOf :Preferencias .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#PreferenciaAlojamientos
+:PreferenciaAlojamientos rdf:type owl:Class ;
+                         rdfs:subClassOf :Preferencias .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#PreferenciaMediosDeTransporte
+:PreferenciaMediosDeTransporte rdf:type owl:Class ;
+                               rdfs:subClassOf :Preferencias .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#Preferencias
+:Preferencias rdf:type owl:Class ;
+              rdfs:comment "Classe que contiene información a tener en cuenta a la hora de decidir entre una opción u otra (se crea a partir de los gustos / feedback del usuario)" .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#Usuario
+:Usuario rdf:type owl:Class ;
+         rdfs:comment "Representa a un usuario registrado dentro de nuestro sistema" .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#Valoracion
+:Valoracion rdf:type owl:Class ;
+            rdfs:comment "Representa las experiencias de un usuario valoradas del 0 al 5. Son anónimas y ayudan a escoger una opción u otra (la mejor de un conjunto)." .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#ValoracionActividad
+:ValoracionActividad rdf:type owl:Class ;
+                     rdfs:subClassOf :Valoracion .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#ValoracionAlojamiento
+:ValoracionAlojamiento rdf:type owl:Class ;
+                       rdfs:subClassOf :Valoracion .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#ValoracionMedioDeTransporte
+:ValoracionMedioDeTransporte rdf:type owl:Class ;
+                             rdfs:subClassOf :Valoracion .
+
+
+###  http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#ValoracionViaje
+:ValoracionViaje rdf:type owl:Class ;
+                 rdfs:subClassOf :Valoracion .
+
+
+#################################################################
+#    General axioms
+#################################################################
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :ActividadCultural
+                :ActividadFestiva
+                :ActividadLudica
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( :PeticionActividadesViaje
+                :PeticionAlojamientoViaje
+                :PeticionDeViaje
+                :PeticionMedioDeTransporteViaje
+              )
+] .
+
+
+###  Generated by the OWL API (version 4.5.25.2023-02-15T19:15:49Z) https://github.com/owlcs/owlapi

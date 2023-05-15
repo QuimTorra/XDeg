@@ -1,0 +1,672 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/ñoñi/ontologies/2023/4/untitled-ontology-7#"
+     xml:base="http://www.semanticweb.org/ñoñi/ontologies/2023/4/untitled-ontology-7"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/ñoñi/ontologies/2023/4/untitled-ontology-7"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#medioIda/Vuelta -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#medioIda/Vuelta"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/contiene -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/contiene">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/perteneceA"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/correspondeA -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/correspondeA"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/correspondenA -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/correspondenA">
+        <owl:equivalentProperty rdf:resource="http://www.w3.org/2002/07/owl#bottomObjectProperty"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#medioIda/Vuelta"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/contiene"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/correspondeA"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/esPropiedadDe"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/esRealizadaPor"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/perteneceA"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/propietarioDe"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/seEncuentraEn"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/seHaObtenidoDe"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/sePreguntaEn"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/seRealizaEn"/>
+        <rdfs:subPropertyOf>
+            <rdf:Description>
+                <owl:inverseOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023#medioIda/Vuelta"/>
+            </rdf:Description>
+        </rdfs:subPropertyOf>
+        <rdfs:subPropertyOf>
+            <rdf:Description>
+                <owl:inverseOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/contiene"/>
+            </rdf:Description>
+        </rdfs:subPropertyOf>
+        <rdfs:subPropertyOf>
+            <rdf:Description>
+                <owl:inverseOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/correspondeA"/>
+            </rdf:Description>
+        </rdfs:subPropertyOf>
+        <rdfs:subPropertyOf>
+            <rdf:Description>
+                <owl:inverseOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/esPropiedadDe"/>
+            </rdf:Description>
+        </rdfs:subPropertyOf>
+        <rdfs:subPropertyOf>
+            <rdf:Description>
+                <owl:inverseOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/esRealizadaPor"/>
+            </rdf:Description>
+        </rdfs:subPropertyOf>
+        <rdfs:subPropertyOf>
+            <rdf:Description>
+                <owl:inverseOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/perteneceA"/>
+            </rdf:Description>
+        </rdfs:subPropertyOf>
+        <rdfs:subPropertyOf>
+            <rdf:Description>
+                <owl:inverseOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/propietarioDe"/>
+            </rdf:Description>
+        </rdfs:subPropertyOf>
+        <rdfs:subPropertyOf>
+            <rdf:Description>
+                <owl:inverseOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/seEncuentraEn"/>
+            </rdf:Description>
+        </rdfs:subPropertyOf>
+        <rdfs:subPropertyOf>
+            <rdf:Description>
+                <owl:inverseOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/seHaObtenidoDe"/>
+            </rdf:Description>
+        </rdfs:subPropertyOf>
+        <rdfs:subPropertyOf>
+            <rdf:Description>
+                <owl:inverseOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/sePreguntaEn"/>
+            </rdf:Description>
+        </rdfs:subPropertyOf>
+        <rdfs:subPropertyOf>
+            <rdf:Description>
+                <owl:inverseOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/seRealizaEn"/>
+            </rdf:Description>
+        </rdfs:subPropertyOf>
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/correspondenA"/>
+        <owl:inverseOf rdf:resource="http://www.w3.org/2002/07/owl#bottomObjectProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#bottomObjectProperty -->
+
+    <rdf:Description rdf:about="http://www.w3.org/2002/07/owl#bottomObjectProperty">
+        <owl:equivalentProperty>
+            <rdf:Description>
+                <owl:inverseOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/correspondenA"/>
+            </rdf:Description>
+        </owl:equivalentProperty>
+    </rdf:Description>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/esPropiedadDe -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/esPropiedadDe">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/propietarioDe"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/esRealizadaPor -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/esRealizadaPor"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/perteneceA -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/perteneceA"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/propietarioDe -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/propietarioDe"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/seEncuentraEn -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/seEncuentraEn"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/seHaObtenidoDe -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/seHaObtenidoDe"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/sePreguntaEn -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/sePreguntaEn"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/seRealizaEn -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/seRealizaEn"/>
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#topObjectProperty -->
+
+    <rdf:Description rdf:about="http://www.w3.org/2002/07/owl#topObjectProperty">
+        <owl:inverseOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#SymmetricProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ReflexiveProperty"/>
+    </rdf:Description>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/FechaHora -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/FechaHora"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/FechaHoraLlegada -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/FechaHoraLlegada">
+        <owl:equivalentProperty rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/FechaHoraVuelta"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/FechaHora"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/IdUsuario"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/MomentoDelDia"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Precio"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaActividad"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaAlojamiento"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaMedioDeTransporte"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaViaje"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividadesCulturales"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividadesFestivas"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividadesLudicas"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Puntuacion"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/FechaHoraVuelta -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/FechaHoraVuelta">
+        <owl:equivalentProperty rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Presupuesto"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Presupuesto -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Presupuesto">
+        <owl:equivalentProperty rdf:resource="http://www.w3.org/2002/07/owl#bottomDataProperty"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#bottomDataProperty -->
+
+    <rdf:Description rdf:about="http://www.w3.org/2002/07/owl#bottomDataProperty"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/FechaHoraVuelta -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/FechaHoraVuelta">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/FechaHora"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/IdUsuario"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/MomentoDelDia"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Precio"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaActividad"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaAlojamiento"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaMedioDeTransporte"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaViaje"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividadesCulturales"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividadesFestivas"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividadesLudicas"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Puntuacion"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/IdUsuario -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/IdUsuario"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/MomentoDelDia -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/MomentoDelDia"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Precio -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Precio"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Pregunta -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Pregunta"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaActividad -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaActividad">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Pregunta"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaAlojamiento -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaAlojamiento">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Pregunta"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaMedioDeTransporte -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaMedioDeTransporte">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Pregunta"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaViaje -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaViaje">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Pregunta"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Presupuesto -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Presupuesto">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/FechaHora"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/IdUsuario"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/MomentoDelDia"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Precio"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaActividad"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaAlojamiento"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaMedioDeTransporte"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreguntaViaje"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividadesCulturales"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividadesFestivas"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividadesLudicas"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Puntuacion"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividades -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividades"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividadesCulturales -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividadesCulturales">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividades"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividadesFestivas -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividadesFestivas">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividades"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividadesLudicas -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividadesLudicas">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ProporcionActividades"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Puntuacion -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Puntuacion"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Actividad -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Actividad">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Usuario"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Valoracion"/>
+        <rdfs:comment>Se trata de una Actividad de entre muchas de un Paquete de Viaje. Se centra en una Localidad y un momento del dia (Mañana, Tarde, Noche).</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ActividadCultural -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ActividadCultural">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Actividad"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ActividadFestiva"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ActividadLudica"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ActividadFestiva -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ActividadFestiva">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Actividad"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ActividadLudica"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ActividadLudica -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ActividadLudica">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Actividad"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Alojamiento -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Alojamiento">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Usuario"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Valoracion"/>
+        <rdfs:comment>Se trata de una estancia donde el propietario dormiría durante su viaje.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/AlojamientoAfueras -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/AlojamientoAfueras">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Alojamiento"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/AlojamientoCentrico"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/AlojamientoCentrico -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/AlojamientoCentrico">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Alojamiento"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/EncuestaDeSatisfaccion -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/EncuestaDeSatisfaccion">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Usuario"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Valoracion"/>
+        <rdfs:comment>Classe que representa un intento de obtener las valoraciones de un usuario</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Localidad -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Localidad">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Usuario"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Valoracion"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/MedioDeTransporte -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/MedioDeTransporte">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Usuario"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Valoracion"/>
+        <rdfs:comment>Se trata del medio a través del cual el usuario se desplazaria a la localidad del viaje.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/MedioDeTransporteIda -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/MedioDeTransporteIda">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/MedioDeTransporte"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/MedioDeTransporteVuelta"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/MedioDeTransporteVuelta -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/MedioDeTransporteVuelta">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/MedioDeTransporte"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PaqueteDeViaje -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PaqueteDeViaje">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Usuario"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Valoracion"/>
+        <rdfs:comment>Objeto que contiene toda la información rellevante con un viaje (localidad, fechas, Actividades, Alojamiento, etc.).</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Peticion -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Peticion">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Usuario"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Valoracion"/>
+        <rdfs:comment>Se trata de una petición de datos relacionados con Viajes, Actividades, etc.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PeticionActividadesViaje -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PeticionActividadesViaje">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Peticion"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PeticionAlojamientoViaje"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PeticionDeViaje"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PeticionMedioDeTransporteViaje"/>
+        <rdfs:comment>Se trata de una petición de datos relacionada con las Actividades de un Paquete.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PeticionAlojamientoViaje -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PeticionAlojamientoViaje">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Peticion"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PeticionDeViaje"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PeticionMedioDeTransporteViaje"/>
+        <rdfs:comment>Se trata de una petición de datos relacionada con el Alojamiento de un Paquete.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PeticionDeViaje -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PeticionDeViaje">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Peticion"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PeticionMedioDeTransporteViaje"/>
+        <rdfs:comment>Se trata de una petición de datos relacionada con un nuevo  Paquete de Viaje de un Usuario.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PeticionMedioDeTransporteViaje -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PeticionMedioDeTransporteViaje">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Peticion"/>
+        <rdfs:comment>Se trata de una petición de datos relacionada con el Medio de Transporte de un Paquete.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreferenciaActividades -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreferenciaActividades">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Preferencias"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreferenciaAlojamientos -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreferenciaAlojamientos">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Preferencias"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreferenciaMediosDeTransporte -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/PreferenciaMediosDeTransporte">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Preferencias"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Preferencias -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Preferencias">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Usuario"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Valoracion"/>
+        <rdfs:comment>Classe que contiene información a tener en cuenta a la hora de decidir entre una opción u otra (se crea a partir de los gustos / feedback del usuario)</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Usuario -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Usuario">
+        <owl:equivalentClass rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Valoracion"/>
+        <rdfs:comment>Representa a un usuario registrado dentro de nuestro sistema</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Valoracion -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Valoracion">
+        <owl:equivalentClass rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#Thing -->
+
+    <rdf:Description rdf:about="http://www.w3.org/2002/07/owl#Thing"/>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Valoracion -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Valoracion">
+        <rdfs:comment>Representa las experiencias de un usuario valoradas del 0 al 5. Son anónimas y ayudan a escoger una opción u otra (la mejor de un conjunto).</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ValoracionActividad -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ValoracionActividad">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Usuario"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Valoracion"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ValoracionAlojamiento -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ValoracionAlojamiento">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Usuario"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Valoracion"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ValoracionMedioDeTransporte -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ValoracionMedioDeTransporte">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Usuario"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Valoracion"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ValoracionViaje -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/ValoracionViaje">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Usuario"/>
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/jborras/ontologies/2023/4/ESCDI_Q2_2023/Valoracion"/>
+    </owl:Class>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.25.2023-02-15T19:15:49Z) https://github.com/owlcs/owlapi -->
+
