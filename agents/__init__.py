@@ -8,13 +8,13 @@ __init__.py
 
     
 
-:Authors: bejar
+:Authors: XDeg
     
 
 :Version: 
 
-:Created on: 11/02/2015 11:51 
+:Created on: 18/05/2023 15:15 
 
 """
 
-__author__ = 'bejar'
+__author__ = 'XDeg'
