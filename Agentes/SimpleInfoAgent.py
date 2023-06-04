@@ -179,7 +179,6 @@ def comunicacion():
 
     # Extraemos el mensaje y creamos un grafo con el
     message = request.args['content']
-
     gm = Graph()
     gm.parse(data=message, format='xml')
 
