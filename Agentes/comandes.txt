@@ -1,0 +1,6 @@
+SimpleDirectoryAgent
+-> python SimpleDirectoryAgent.py --port 9000 --verbose
+
+
+SimpleInfoAgent
+-> python SimpleInfoAgent.py --port 9010 --verbose

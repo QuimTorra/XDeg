@@ -10,8 +10,8 @@ from flask import Flask, request
 from AgentUtil.FlaskServer import shutdown_server
 from AgentUtil.Agent import Agent
 from AgentUtil.ACLMessages import build_message
-from Agentes.AgentUtil import ACL
-from Agentes.AgentUtil.ACLMessages import get_message_properties
+from AgentUtil import ACL
+from AgentUtil.ACLMessages import get_message_properties
 
 __author__ = 'ori'
 
