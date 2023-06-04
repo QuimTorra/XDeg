@@ -40,5 +40,6 @@ DSO =  ClosedNamespace(
         'WeatherAgent',
         'PaymentAgent',
         'GestorTransporte',
+        'ExTransporte',
     ]
 )

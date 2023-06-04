@@ -219,6 +219,18 @@ def comunicacion():
                 content = msgdic['content']
                 accion = gm.value(subject=content, predicate=RDF.type)
 
+            address = 'http://%s:%d/' % (ahostname, aport)
+            deg = build_message(Graph(),
+                                ACL.request,
+                                sender=GestorTransporte.uri,
+                                msgcnt=mss_cnt,
+                                content=content).serialize(format='xml')
+            r = requests.get(address + 'transport', params={'content': deg})
+            g_res = Graph()
+            g_res.parse(data=r._content, format='xml')
+            g_res_cont = get_message_properties(g_res)
+            transport = g_res_cont['content'] # form
+
             # Aqui realizariamos lo que pide la accion
             # Por ahora simplemente retornamos un Inform-done
             gr = build_message(Graph(),
@@ -226,12 +238,9 @@ def comunicacion():
                                sender=GestorTransporte.uri,
                                msgcnt=mss_cnt,
                                receiver=msgdic['sender'],
-                               content=Literal("deg") )
+                               content=transport)
     mss_cnt += 1
 
-    address = 'http://%s:%d/' % (ahostname, aport)
-    r = requests.get(address + 'transport', params={'coses': 'deg'})
-    print(r)
 
     logger.info('Respondemos a la peticion')
 

@@ -17,7 +17,7 @@ import logging
 import argparse
 
 from flask import Flask, render_template, request
-from rdflib import Graph, Namespace
+from rdflib import Graph, Literal, Namespace
 from rdflib.namespace import FOAF, RDF
 
 from AgentUtil.ACL import ACL
@@ -27,9 +27,11 @@ from AgentUtil.ACLMessages import build_message, send_message
 from AgentUtil.Agent import Agent
 from AgentUtil.Logging import config_logger
 from AgentUtil.Util import gethostname
+from AgentUtil.OntoNamespaces import ECSDI
 import socket
 
 from AgentUtil.ACLMessages import get_message_properties
+from AGestorTransporte import GestorTransporte
 
 __author__ = 'javier'
 
@@ -100,7 +102,6 @@ DirectoryAgent = Agent('DirectoryAgent',
 # Global dsgraph triplestore
 dsgraph = Graph()
 
-
 def directory_search_message(type):
     """
     Busca en el servicio de registro mandando un
@@ -135,7 +136,7 @@ def directory_search_message(type):
     return gr
 
 
-def infoagent_search_message(addr, ragn_uri):
+def infoagent_search_message(addr, ragn_uri, content):
     """
     Envia una accion a un agente de informacion
     """
@@ -155,7 +156,8 @@ def infoagent_search_message(addr, ragn_uri):
     msg = build_message(gmess, perf=ACL.request,
                         sender=AgentePersonal.uri,
                         receiver=ragn_uri,
-                        msgcnt=mss_cnt)
+                        msgcnt=mss_cnt,
+                        content=content)
     gr = send_message(msg, addr)
     mss_cnt += 1
     logger.info('Recibimos respuesta a la peticion al servicio de informacion')
@@ -181,7 +183,23 @@ def hacer_plan():
     if request.method == 'GET':
         return render_template('plan.html')
     else:
-        return render_template('rplan.html')
+        gr = directory_search_message(DSO.GestorTransporte)
+        msg = gr.value(predicate=RDF.type, object=ACL.FipaAclMessage)
+        content = gr.value(subject=msg, predicate=ACL.content)
+        ragn_addr = gr.value(subject=content, predicate=DSO.Address)
+        ragn_uri = gr.value(subject=content, predicate=DSO.Uri)
+
+        deg = build_message(Graph(),
+                               ACL['request'],
+                               sender=AgentePersonal.uri,
+                               msgcnt=mss_cnt,
+                               receiver=GestorTransporte.uri,
+                               content=Literal(request.form) )
+        rr = send_message(deg, ragn_addr)
+        msgdic = get_message_properties(rr)
+        transport = msgdic['content']
+
+        return render_template('rplan.html', transport=transport)
 
 
 @app.route("/stop")
@@ -219,22 +237,22 @@ def agentbehavior1():
     :return:
     """
 
-    # Buscamos en el directorio
-    # un agente de hoteles
-    gr = directory_search_message(DSO.GestorTransporte)
+    # # Buscamos en el directorio
+    # # un agente de hoteles
+    # gr = directory_search_message(DSO.GestorTransporte)
 
-    # Obtenemos la direccion del agente de la respuesta
-    # No hacemos ninguna comprobacion sobre si es un mensaje valido
-    msg = gr.value(predicate=RDF.type, object=ACL.FipaAclMessage)
-    content = gr.value(subject=msg, predicate=ACL.content)
-    ragn_addr = gr.value(subject=content, predicate=DSO.Address)
-    ragn_uri = gr.value(subject=content, predicate=DSO.Uri)
+    # # Obtenemos la direccion del agente de la respuesta
+    # # No hacemos ninguna comprobacion sobre si es un mensaje valido
+    # msg = gr.value(predicate=RDF.type, object=ACL.FipaAclMessage)
+    # content = gr.value(subject=msg, predicate=ACL.content)
+    # ragn_addr = gr.value(subject=content, predicate=DSO.Address)
+    # ragn_uri = gr.value(subject=content, predicate=DSO.Uri)
 
-    # Ahora mandamos un objeto de tipo request mandando una accion de tipo Search
-    # que esta en una supuesta ontologia de acciones de agentes
-    gg = infoagent_search_message(ragn_addr, ragn_uri)
-    msgdic = get_message_properties(gg)
-    print(msgdic["content"])
+    # # Ahora mandamos un objeto de tipo request mandando una accion de tipo Search
+    # # que esta en una supuesta ontologia de acciones de agentes
+    # gg = infoagent_search_message(ragn_addr, ragn_uri)
+    # msgdic = get_message_properties(gg)
+    # print(msgdic["content"])
 
 if __name__ == '__main__':
     # Ponemos en marcha los behaviors
