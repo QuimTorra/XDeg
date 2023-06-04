@@ -23,6 +23,8 @@ from AgentUtil.DSO import DSO
 from AgentUtil.ACLMessages import send_message
 from AgentUtil.Logging import config_logger
 from SimpleDirectoryAgent import DirectoryAgent
+from AgentUtil.OntoNamespaces import ECSDI
+
 
 # Definimos los parametros de la linea de comandos
 parser = argparse.ArgumentParser()
@@ -123,12 +125,36 @@ def isAlive():
 @app.route("/transport")
 def getTransport():
   # host:port/transport
+  
   message = request.args['content']
-
   gm = Graph()
   gm.parse(data=message, format='xml')
 
   msgdic = get_message_properties(gm)
+  content = msgdic['content']
+
+  #accion (to check if correct or smthing else)
+  accion = gm.value(subject=content, predicate=RDF.type)
+  if accion == ECSDI.Pedir_plan_viaje or accion != ECSDI.Pedir_plan_viaje:
+    print("Content", content)
+    
+    print("accion", accion)
+    
+    destino = gm.value(subject=content, predicate=ECSDI.Destino)
+    print("DESTINO", destino)
+
+    data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
+    print("DATA_INI", data_ini)
+
+    data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
+    print("DATA_FI", data_fi)
+
+    pres = gm.value(subject=content, predicate=ECSDI.Presupuesto)
+    print("PRES", pres)
+    
+
+
+  print(msgdic)
 
   content = msgdic['content'] # form
   print(content)

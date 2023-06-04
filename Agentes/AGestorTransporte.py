@@ -220,7 +220,7 @@ def comunicacion():
                 accion = gm.value(subject=content, predicate=RDF.type)
 
             address = 'http://%s:%d/' % (ahostname, aport)
-            deg = build_message(Graph(),
+            deg = build_message(gm,
                                 ACL.request,
                                 sender=GestorTransporte.uri,
                                 msgcnt=mss_cnt,

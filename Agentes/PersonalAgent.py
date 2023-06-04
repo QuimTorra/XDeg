@@ -17,7 +17,7 @@ import logging
 import argparse
 
 from flask import Flask, render_template, request
-from rdflib import Graph, Literal, Namespace
+from rdflib import Graph, Literal, Namespace, XSD
 from rdflib.namespace import FOAF, RDF
 
 from AgentUtil.ACL import ACL
@@ -164,6 +164,12 @@ def infoagent_search_message(addr, ragn_uri, content):
 
     return gr
 
+def get_count():
+    global mss_cnt
+    if not mss_cnt:
+        mss_cnt = 0
+    mss_cnt += 1
+    return mss_cnt
 
 @app.route("/iface", methods=['GET', 'POST'])
 def browser_iface():
@@ -187,14 +193,24 @@ def hacer_plan():
         msg = gr.value(predicate=RDF.type, object=ACL.FipaAclMessage)
         content = gr.value(subject=msg, predicate=ACL.content)
         ragn_addr = gr.value(subject=content, predicate=DSO.Address)
-        ragn_uri = gr.value(subject=content, predicate=DSO.Uri)
+        
+        #Peticion Viaje
+        gr = Graph()
+        contentResult = ECSDI['Pedir_plan_viaje_'+ str(get_count())]
+        gr.add((contentResult, RDF.type, ECSDI.Pedir_plan_viaje))
+        gr.add((contentResult, ECSDI.Destino, Literal("destino", datatype=XSD.string)))
+        gr.add((contentResult, ECSDI.Data_Ini, Literal("2023/03/02", datatype=XSD.string)))
+        gr.add((contentResult, ECSDI.Data_Fi, Literal("2023/03/09", datatype=XSD.string)))
+        gr.add((contentResult, ECSDI.Presupuesto, Literal("200", datatype=XSD.string)))
 
-        deg = build_message(Graph(),
+
+
+        deg = build_message(gr,
                                ACL['request'],
                                sender=AgentePersonal.uri,
-                               msgcnt=mss_cnt,
                                receiver=GestorTransporte.uri,
-                               content=Literal(request.form) )
+                               content=contentResult,
+                               msgcnt=get_count(),)
         rr = send_message(deg, ragn_addr)
         msgdic = get_message_properties(rr)
         transport = msgdic['content']
