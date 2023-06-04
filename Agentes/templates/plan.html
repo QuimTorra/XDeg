@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XDeg</title>
+</head>
+<body>
+  <h2>Generate the best plan for you:</h2>
+  <form action="/plan" method="post">
+    <label for="dateIni">Date Ini: </label>
+    <input type="date" name="dateIni" id="dateIni">
+    <br>
+    <label for="dateEnd">Date End: </label>
+    <input type="date" name="dateEnd" id="dateEnd">
+    <br>
+    <h4>Choose Transport:</h4>
+    <ul>
+      <li>
+        <input type="checkbox" name="tp_bus" id="tp_bus" checked>
+        <label for="tp_bus">Bus</label>
+      </li>
+      <li>
+        <input type="checkbox" name="tp_plane" id="tp_plane" checked>
+        <label for="tp_plane">Plane</label>
+      </li>
+      <li>
+        <input type="checkbox" name="tp_train" id="tp_train" checked>
+        <label for="tp_train">Train</label>
+      </li>
+    </ul>
+
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>

@@ -29,6 +29,8 @@ from AgentUtil.Logging import config_logger
 from AgentUtil.Util import gethostname
 import socket
 
+from AgentUtil.ACLMessages import get_message_properties
+
 __author__ = 'javier'
 
 # Definimos los parametros de la linea de comandos
@@ -49,7 +51,7 @@ args = parser.parse_args()
 
 # Configuration stuff
 if args.port is None:
-    port = 9002
+    port = 9001
 else:
     port = args.port
 
@@ -174,6 +176,13 @@ def browser_iface():
         mess = request.form['message']
         return render_template('riface.html', user=user, mess=mess)
 
+@app.route("/plan", methods=['GET', 'POST'])
+def hacer_plan():
+    if request.method == 'GET':
+        return render_template('plan.html')
+    else:
+        return render_template('rplan.html')
+
 
 @app.route("/stop")
 def stop():
@@ -212,7 +221,7 @@ def agentbehavior1():
 
     # Buscamos en el directorio
     # un agente de hoteles
-    gr = directory_search_message(DSO.HotelsAgent)
+    gr = directory_search_message(DSO.GestorTransporte)
 
     # Obtenemos la direccion del agente de la respuesta
     # No hacemos ninguna comprobacion sobre si es un mensaje valido
@@ -223,7 +232,9 @@ def agentbehavior1():
 
     # Ahora mandamos un objeto de tipo request mandando una accion de tipo Search
     # que esta en una supuesta ontologia de acciones de agentes
-    infoagent_search_message(ragn_addr, ragn_uri)
+    gg = infoagent_search_message(ragn_addr, ragn_uri)
+    msgdic = get_message_properties(gg)
+    print(msgdic["content"])
 
 if __name__ == '__main__':
     # Ponemos en marcha los behaviors
