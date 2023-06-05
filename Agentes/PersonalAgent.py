@@ -207,6 +207,8 @@ def hacer_plan():
         if 'tp_plane' in request.form: pref_trans.append('plane')
         if 'tp_train' in request.form: pref_trans.append('train')
         if 'tp_ferry' in request.form: pref_trans.append('ferry')
+        pref_aloj = ['hotel', 'apartamento', 'casa rural', 'camping', 'deg']
+        estrellas = 3
 
         #Peticion Viaje
         gr = Graph()
@@ -218,6 +220,8 @@ def hacer_plan():
         gr.add((contentResult, ECSDI.Data_Fi, Literal(date_Fi, datatype=XSD.date)))
         gr.add((contentResult, ECSDI.Presupuesto, Literal(presupost, datatype=XSD.integer)))
         gr.add((contentResult, ECSDI.Preferencias_Medio_Transporte, Literal(str(pref_trans), datatype=XSD.string)))
+        gr.add((contentResult, ECSDI.Preferencias_Alojamiento, Literal(str(pref_aloj), datatype=XSD.string)))
+        gr.add((contentResult, ECSDI.Estrellas, Literal(estrellas, datatype=XSD.integer)))
         
 
         deg = build_message(gr,

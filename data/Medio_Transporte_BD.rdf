@@ -1,74 +1,60 @@
 @prefix ns1: <http://www.owl-ontologies.com/ECSDI_2023.owl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-ns1:Alojamiento_1 a ns1:Alojamiento ;
-    ns1:Estrellas 4 ;
-    ns1:Nombre "hotel"^^xsd:string ;
+ns1:Medio_De_Transporte_1 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "bus"^^xsd:string ;
     ns1:Pertenece_a ns1:Destino_0 ;
-    ns1:Precio 100 .
+    ns1:Precio 50 .
 
-ns1:Alojamiento_10 a ns1:Alojamiento ;
-    ns1:Estrellas 3 ;
-    ns1:Nombre "hotel"^^xsd:string ;
+ns1:Medio_De_Transporte_10 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "plane"^^xsd:string ;
     ns1:Pertenece_a ns1:Destino_3 ;
+    ns1:Precio 235 .
+
+ns1:Medio_De_Transporte_11 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "train"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_3 ;
+    ns1:Precio 85 .
+
+ns1:Medio_De_Transporte_2 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "plane"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_0 ;
+    ns1:Precio 150 .
+
+ns1:Medio_De_Transporte_3 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "train"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_0 ;
+    ns1:Precio 75 .
+
+ns1:Medio_De_Transporte_4 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "ferry"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_0 ;
+    ns1:Precio 120 .
+
+ns1:Medio_De_Transporte_5 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "plane"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_1 ;
+    ns1:Precio 275 .
+
+ns1:Medio_De_Transporte_6 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "bus"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_1 ;
     ns1:Precio 70 .
 
-ns1:Alojamiento_11 a ns1:Alojamiento ;
-    ns1:Estrellas 4,
-        5 ;
-    ns1:Nombre "casa rural"^^xsd:string,
-        "deg"^^xsd:string ;
-    ns1:Pertenece_a ns1:Destino_3 ;
-    ns1:Precio 120,
-        240 .
-
-ns1:Alojamiento_2 a ns1:Alojamiento ;
-    ns1:Estrellas 4 ;
-    ns1:Nombre "apartament"^^xsd:string ;
-    ns1:Pertenece_a ns1:Destino_0 ;
-    ns1:Precio 80 .
-
-ns1:Alojamiento_3 a ns1:Alojamiento ;
-    ns1:Estrellas 4 ;
-    ns1:Nombre "hotel"^^xsd:string ;
-    ns1:Pertenece_a ns1:Destino_0 ;
-    ns1:Precio 100 .
-
-ns1:Alojamiento_4 a ns1:Alojamiento ;
-    ns1:Estrellas 4 ;
-    ns1:Nombre "hotel"^^xsd:string ;
-    ns1:Pertenece_a ns1:Destino_0 ;
-    ns1:Precio 100 .
-
-ns1:Alojamiento_5 a ns1:Alojamiento ;
-    ns1:Estrellas 4 ;
-    ns1:Nombre "hotel"^^xsd:string ;
+ns1:Medio_De_Transporte_7 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "train"^^xsd:string ;
     ns1:Pertenece_a ns1:Destino_1 ;
-    ns1:Precio 160 .
+    ns1:Precio 40 .
 
-ns1:Alojamiento_6 a ns1:Alojamiento ;
-    ns1:Estrellas 3 ;
-    ns1:Nombre "apartament"^^xsd:string ;
-    ns1:Pertenece_a ns1:Destino_1 ;
-    ns1:Precio 90 .
-
-ns1:Alojamiento_7 a ns1:Alojamiento ;
-    ns1:Estrellas 4 ;
-    ns1:Nombre "hotel"^^xsd:string ;
-    ns1:Pertenece_a ns1:Destino_1 ;
-    ns1:Precio 100 .
-
-ns1:Alojamiento_8 a ns1:Alojamiento ;
-    ns1:Estrellas 5 ;
-    ns1:Nombre "hotel"^^xsd:string ;
+ns1:Medio_De_Transporte_8 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "plane"^^xsd:string ;
     ns1:Pertenece_a ns1:Destino_2 ;
-    ns1:Precio 110 .
+    ns1:Precio 240 .
 
-ns1:Alojamiento_9 a ns1:Alojamiento ;
-    ns1:Estrellas 5 ;
-    ns1:Nombre "deg"^^xsd:string ;
+ns1:Medio_De_Transporte_9 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "ferry"^^xsd:string ;
     ns1:Pertenece_a ns1:Destino_2 ;
-    ns1:Precio 250 .
+    ns1:Precio 120 .
 
 ns1:Destino_2 a ns1:Destino ;
     ns1:Nombre "london"^^xsd:string .

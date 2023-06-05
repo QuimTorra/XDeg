@@ -33,7 +33,7 @@ ns1:Alojamiento_13 a ns1:Alojamiento ;
 
 ns1:Alojamiento_2 a ns1:Alojamiento ;
     ns1:Estrellas 4 ;
-    ns1:Nombre "apartament"^^xsd:string ;
+    ns1:Nombre "apartamento"^^xsd:string ;
     ns1:Pertenece_a ns1:Destino_0 ;
     ns1:Precio 80 .
 
@@ -45,7 +45,7 @@ ns1:Alojamiento_3 a ns1:Alojamiento ;
 
 ns1:Alojamiento_4 a ns1:Alojamiento ;
     ns1:Estrellas 5 ;
-    ns1:Nombre "apartament"^^xsd:string ;
+    ns1:Nombre "apartamento"^^xsd:string ;
     ns1:Pertenece_a ns1:Destino_0 ;
     ns1:Precio 95 .
 
@@ -57,7 +57,7 @@ ns1:Alojamiento_5 a ns1:Alojamiento ;
 
 ns1:Alojamiento_6 a ns1:Alojamiento ;
     ns1:Estrellas 5 ;
-    ns1:Nombre "apartament"^^xsd:string ;
+    ns1:Nombre "apartamento"^^xsd:string ;
     ns1:Pertenece_a ns1:Destino_1 ;
     ns1:Precio 90 .
 

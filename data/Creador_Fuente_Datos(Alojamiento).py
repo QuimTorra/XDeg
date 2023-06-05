@@ -33,7 +33,7 @@ gr.add((medio_trans_ciudad, ECSDI.Pertenece_a, URIRef(content)))
 
 medio_trans_ciudad = ECSDI['Alojamiento_2']
 gr.add((medio_trans_ciudad, RDF.type, ECSDI.Alojamiento))
-gr.add((medio_trans_ciudad, ECSDI.Nombre, Literal('apartament', datatype=XSD.string)))
+gr.add((medio_trans_ciudad, ECSDI.Nombre, Literal('apartamento', datatype=XSD.string)))
 gr.add((medio_trans_ciudad, ECSDI.Precio, Literal(80, datatype=XSD.integer)))
 gr.add((medio_trans_ciudad, ECSDI.Estrellas, Literal(4, datatype=XSD.integer)))
 gr.add((medio_trans_ciudad, ECSDI.Pertenece_a, URIRef(content)))
@@ -47,7 +47,7 @@ gr.add((medio_trans_ciudad, ECSDI.Pertenece_a, URIRef(content)))
 
 medio_trans_ciudad = ECSDI['Alojamiento_4']
 gr.add((medio_trans_ciudad, RDF.type, ECSDI.Alojamiento))
-gr.add((medio_trans_ciudad, ECSDI.Nombre, Literal('apartament', datatype=XSD.string)))
+gr.add((medio_trans_ciudad, ECSDI.Nombre, Literal('apartamento', datatype=XSD.string)))
 gr.add((medio_trans_ciudad, ECSDI.Precio, Literal(95, datatype=XSD.integer)))
 gr.add((medio_trans_ciudad, ECSDI.Estrellas, Literal(5, datatype=XSD.integer)))
 gr.add((medio_trans_ciudad, ECSDI.Pertenece_a, URIRef(content)))
@@ -68,7 +68,7 @@ gr.add((medio_trans_ciudad, ECSDI.Pertenece_a, URIRef(content)))
 
 medio_trans_ciudad = ECSDI['Alojamiento_6']
 gr.add((medio_trans_ciudad, RDF.type, ECSDI.Alojamiento))
-gr.add((medio_trans_ciudad, ECSDI.Nombre, Literal('apartament', datatype=XSD.string)))
+gr.add((medio_trans_ciudad, ECSDI.Nombre, Literal('apartamento', datatype=XSD.string)))
 gr.add((medio_trans_ciudad, ECSDI.Precio, Literal(90, datatype=XSD.integer)))
 gr.add((medio_trans_ciudad, ECSDI.Estrellas, Literal(5, datatype=XSD.integer)))
 gr.add((medio_trans_ciudad, ECSDI.Pertenece_a, URIRef(content)))
