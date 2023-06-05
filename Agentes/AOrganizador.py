@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-filename: AgenteGestorTransporte
+filename: AgenteOrganizador 
 
 Antes de ejecutar hay que añadir la raiz del proyecto a la variable PYTHONPATH
 
-Agente que se registra como agente de Gestor de Transporte y espera peticiones
+Agente que se comunica con otros agentes para organizar un viaje para un determinado usuario.
 
 @author: javier
 """
@@ -51,7 +51,7 @@ args = parser.parse_args()
 
 # Configuration stuff
 if args.port is None:
-    port = 9011
+    port = 9010
 else:
     port = args.port
 
@@ -96,8 +96,8 @@ agn = Namespace("http://www.agentes.org#")
 mss_cnt = 0
 
 # Datos del Agente
-GestorTransporte = Agent('GestorTransporte',
-                  agn.GestorTransporte,
+AgenteOrganizador = Agent('AgenteOrganizador',
+                  agn.AgenteOrganizador,
                   'http://%s:%d/comm' % (hostaddr, port),
                   'http://%s:%d/Stop' % (hostaddr, port))
 
@@ -133,17 +133,17 @@ def register_message():
     # Construimos el mensaje de registro
     gmess.bind('foaf', FOAF)
     gmess.bind('dso', DSO)
-    reg_obj = agn[GestorTransporte.name + '-Register']
+    reg_obj = agn[AgenteOrganizador.name + '-Register']
     gmess.add((reg_obj, RDF.type, DSO.Register))
-    gmess.add((reg_obj, DSO.Uri, GestorTransporte.uri))
-    gmess.add((reg_obj, FOAF.name, Literal(GestorTransporte.name)))
-    gmess.add((reg_obj, DSO.Address, Literal(GestorTransporte.address)))
-    gmess.add((reg_obj, DSO.AgentType, DSO.GestorTransporte))
+    gmess.add((reg_obj, DSO.Uri, AgenteOrganizador.uri))
+    gmess.add((reg_obj, FOAF.name, Literal(AgenteOrganizador.name)))
+    gmess.add((reg_obj, DSO.Address, Literal(AgenteOrganizador.address)))
+    gmess.add((reg_obj, DSO.AgentType, DSO.AgenteOrganizador))
 
     # Lo metemos en un envoltorio FIPA-ACL y lo enviamos
     gr = send_message(
         build_message(gmess, perf=ACL.request,
-                      sender=GestorTransporte.uri,
+                      sender=AgenteOrganizador.uri,
                       receiver=DirectoryAgent.uri,
                       content=reg_obj,
                       msgcnt=mss_cnt),
@@ -198,48 +198,17 @@ def comunicacion():
     gm.parse(data=message, format='xml')
 
     msgdic = get_message_properties(gm)
+    req_content = msgdic['content']
 
-    # Comprobamos que sea un mensaje FIPA ACL
-    if msgdic is None:
-        # Si no es, respondemos que no hemos entendido el mensaje
-        gr = build_message(Graph(), ACL['not-understood'], sender=GestorTransporte.uri, msgcnt=mss_cnt)
-    else:
-        # Obtenemos la performativa
-        perf = msgdic['performative']
+    print(req_content)
 
-        if perf != ACL.request:
-            # Si no es un request, respondemos que no hemos entendido el mensaje
-            gr = build_message(Graph(), ACL['not-understood'], sender=GestorTransporte.uri, msgcnt=mss_cnt)
-        else:
-            # Extraemos el objeto del contenido que ha de ser una accion de la ontologia de acciones del agente
-            # de registro
-
-            # Averiguamos el tipo de la accion
-            if 'content' in msgdic:
-                content = msgdic['content']
-                accion = gm.value(subject=content, predicate=RDF.type)
-
-            address = 'http://%s:%d/' % (ahostname, aport)
-            deg = build_message(gm,
-                                ACL.request,
-                                sender=GestorTransporte.uri,
-                                msgcnt=mss_cnt,
-                                content=content).serialize(format='xml')
-            r = requests.get(address + 'transport', params={'content': deg})
-            g_res = Graph()
-            g_res.parse(data=r._content, format='xml')
-            g_res_cont = get_message_properties(g_res)
-            transport = g_res_cont['content'] # form
-
-            # Aqui realizariamos lo que pide la accion
-            # Por ahora simplemente retornamos un Inform-done
-            gr = build_message(Graph(),
-                               ACL['inform'],
-                               sender=GestorTransporte.uri,
-                               msgcnt=mss_cnt,
-                               receiver=msgdic['sender'],
-                               content=transport)
     mss_cnt += 1
+    gr = build_message(Graph(),
+                        ACL['inform'],
+                        sender=AgenteOrganizador.uri,
+                        msgcnt=mss_cnt,
+                        receiver=msgdic['sender'],
+                        content=Literal("Return from Organizador"))
 
 
     logger.info('Respondemos a la peticion')
