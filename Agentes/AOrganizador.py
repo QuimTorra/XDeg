@@ -306,7 +306,7 @@ def pedir_transporte(destino, data_ini, data_fi, pref_Transportes):
     if transport.toPython() == "OPTIONS AVAILABLE":
         for medio_t in tp_res.subjects(RDF.type, ECSDI.Medio_De_Transporte):
             #There should only be one inside the list
-            transport_name = tp_res.value(subject=medio_t, predicate=ECSDI.Nombre)
+            transport_name = tp_res.value(subject=medio_t, predicate=ECSDI.Nombre).toPython()
             transport_price = tp_res.value(subject=medio_t, predicate=ECSDI.Precio).toPython()
             return transport_name, transport_price
     return None, None
@@ -336,12 +336,12 @@ def pedir_alojamiento(destino, data_ini, data_fi, pref_Alojamientos, min_estrell
     aj_m = get_message_properties(aj_res)
     aj_cont = aj_m['content']
     if aj_cont.toPython() == "OPTIONS AVAILABLE":
-        for medio_t in aj_res.subjects(RDF.type, ECSDI.Medio_De_Transporte):
+        for medio_t in aj_res.subjects(RDF.type, ECSDI.Alojamiento):
             #There should only be one inside the list
-            aloj_name = aj_res.value(subject=medio_t, predicate=ECSDI.Nombre)
+            aloj_name = aj_res.value(subject=medio_t, predicate=ECSDI.Nombre).toPython()
             aloj_price = aj_res.value(subject=medio_t, predicate=ECSDI.Precio).toPython()
             aloj_stars = aj_res.value(subject=medio_t, predicate=ECSDI.Estrellas).toPython()
-            return aloj_name, aloj_stars, aloj_price
+            return aloj_name, aloj_price, aloj_stars
     return None, None, None
 
 def tidyup():
