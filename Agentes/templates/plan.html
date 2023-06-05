@@ -9,6 +9,18 @@
 <body>
   <h2>Generate the best plan for you:</h2>
   <form action="/plan" method="post">
+
+    <label> Destination: </label>
+    <select name="tp_destination" id="tp_destination" size="1">
+      <option selected disabled>-- Select Destination --</option>
+      <option value="barcelona">Barcelona</option>
+      <option value="paris">Paris</option>
+      <option value="london">London</option>
+      <option value="rome">Rome</option>
+    </select>
+    <br>
+    <br>
+
     <label for="dateIni">Date Ini: </label>
     <input type="date" name="dateIni" id="dateIni">
     <br>
@@ -34,6 +46,11 @@
         <label for="tp_ferry">Ferry</label>
       </li>
     </ul>
+
+      <label for="presupost">Budget</label>
+      <input type="number" name="presupost" id="presupost">
+      <label for="presupost"> € </label>
+    <br>
 
     <button type="submit">Submit</button>
   </form>

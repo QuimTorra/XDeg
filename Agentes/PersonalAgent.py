@@ -17,7 +17,7 @@ import logging
 import argparse
 
 from flask import Flask, render_template, request
-from rdflib import Graph, Literal, Namespace
+from rdflib import XSD, Graph, Literal, Namespace
 from rdflib.namespace import FOAF, RDF
 
 from AgentUtil.ACL import ACL
@@ -31,7 +31,7 @@ from AgentUtil.OntoNamespaces import ECSDI
 import socket
 
 from AgentUtil.ACLMessages import get_message_properties
-from AGestorTransporte import GestorTransporte
+from AOrganizador import AgenteOrganizador
 
 __author__ = 'javier'
 
@@ -102,6 +102,13 @@ DirectoryAgent = Agent('DirectoryAgent',
 # Global dsgraph triplestore
 dsgraph = Graph()
 
+def get_count():
+    global mss_cnt
+    if not mss_cnt:
+        mss_cnt = 0
+    mss_cnt += 1
+    return mss_cnt
+
 def directory_search_message(type):
     """
     Busca en el servicio de registro mandando un
@@ -167,37 +174,59 @@ def infoagent_search_message(addr, ragn_uri, content):
 
 @app.route("/iface", methods=['GET', 'POST'])
 def browser_iface():
-    """
-    Permite la comunicacion con el agente via un navegador
-    via un formulario
-    """
-    if request.method == 'GET':
-        return render_template('iface.html')
-    else:
-        user = request.form['username']
-        mess = request.form['message']
-        return render_template('riface.html', user=user, mess=mess)
+    return "Not implemented"
+    # """
+    # Permite la comunicacion con el agente via un navegador
+    # via un formulario
+    # """
+    # if request.method == 'GET':
+    #     return render_template('iface.html')
+    # else:
+    #     user = request.form['username']
+    #     mess = request.form['message']
+    #     return render_template('riface.html', user=user, mess=mess)
 
 @app.route("/plan", methods=['GET', 'POST'])
 def hacer_plan():
     if request.method == 'GET':
         return render_template('plan.html')
     else:
-        gr = directory_search_message(DSO.GestorTransporte)
+        gr = directory_search_message(DSO.AgenteOrganizador)
         msg = gr.value(predicate=RDF.type, object=ACL.FipaAclMessage)
-        content = gr.value(subject=msg, predicate=ACL.content)
-        ragn_addr = gr.value(subject=content, predicate=DSO.Address)
-        ragn_uri = gr.value(subject=content, predicate=DSO.Uri)
+        res_content = gr.value(subject=msg, predicate=ACL.content)
+        ragn_addr = gr.value(subject=res_content, predicate=DSO.Address)
 
-        deg = build_message(Graph(),
+        #GET INFO FORM
+        destination = request.form['tp_destination']
+        date_Ini = request.form['dateIni']
+        date_Fi = request.form['dateEnd'] 
+        presupost = request.form['presupost']
+        pref_trans =  []
+        if 'tp_bus' in request.form: pref_trans.append('bus')
+        if 'tp_plane' in request.form: pref_trans.append('plane')
+        if 'tp_train' in request.form: pref_trans.append('train')
+        if 'tp_ferry' in request.form: pref_trans.append('ferry')
+
+        #Peticion Viaje
+        gr = Graph()
+        contentResult = ECSDI['Pedir_plan_viaje_'+ str(get_count())]
+        gr.add((contentResult, RDF.type, ECSDI.Pedir_plan_viaje))
+        gr.add((contentResult, ECSDI.Destino, Literal(destination, datatype=XSD.string)))
+        gr.add((contentResult, ECSDI.Data_Ini, Literal(date_Ini, datatype=XSD.date)))
+        gr.add((contentResult, ECSDI.Data_Fi, Literal(date_Fi, datatype=XSD.date)))
+        gr.add((contentResult, ECSDI.Presupuesto, Literal(presupost, datatype=XSD.integer)))
+        gr.add((contentResult, ECSDI.Preferencias_Medio_Transporte, Literal(str(pref_trans), datatype=XSD.string)))
+
+        deg = build_message(gr,
                                ACL['request'],
                                sender=AgentePersonal.uri,
                                msgcnt=mss_cnt,
-                               receiver=GestorTransporte.uri,
-                               content=Literal(request.form) )
+                               receiver=AgenteOrganizador.uri,
+                               content=contentResult)
         rr = send_message(deg, ragn_addr)
         msgdic = get_message_properties(rr)
-        transport = msgdic['content']
+        res_content = msgdic['content']
+        transport = rr.value(subject=res_content, predicate=ECSDI.transport)
 
         return render_template('rplan.html', transport=transport)
 
@@ -236,23 +265,7 @@ def agentbehavior1():
 
     :return:
     """
-
-    # # Buscamos en el directorio
-    # # un agente de hoteles
-    # gr = directory_search_message(DSO.GestorTransporte)
-
-    # # Obtenemos la direccion del agente de la respuesta
-    # # No hacemos ninguna comprobacion sobre si es un mensaje valido
-    # msg = gr.value(predicate=RDF.type, object=ACL.FipaAclMessage)
-    # content = gr.value(subject=msg, predicate=ACL.content)
-    # ragn_addr = gr.value(subject=content, predicate=DSO.Address)
-    # ragn_uri = gr.value(subject=content, predicate=DSO.Uri)
-
-    # # Ahora mandamos un objeto de tipo request mandando una accion de tipo Search
-    # # que esta en una supuesta ontologia de acciones de agentes
-    # gg = infoagent_search_message(ragn_addr, ragn_uri)
-    # msgdic = get_message_properties(gg)
-    # print(msgdic["content"])
+    logger.info("AgentePersonal Running ...")
 
 if __name__ == '__main__':
     # Ponemos en marcha los behaviors
