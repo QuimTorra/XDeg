@@ -264,14 +264,18 @@ def comunicacion():
                             msgcnt=mss_cnt,
                             content=tp_content)
         tp_res = send_message(deg, trans_addr)
-
-        for s, o, p in tp_res:
-            print(s, o, p)
+        rm = get_message_properties(tp_res)
+        transport = rm['content']
+        if transport.toPython() == "OPTIONS AVAILABLE":
+            for medio_t in tp_res.subjects(RDF.type, ECSDI.Medio_De_Transporte):
+                #There should only be one inside the list
+                transport_name = tp_res.value(subject=medio_t, predicate=ECSDI.Nombre)
+                transport_price = tp_res.value(subject=medio_t, predicate=ECSDI.Precio).toPython()
 
 
         tp_m = get_message_properties(tp_res)
         transport = tp_m['content']
-        logger.info("Transport: %s", transport)
+        logger.info("Transport: %s", transport_name)
 
         # Buscamos Alojamiento
         gr_a = find_agent_info(DSO.GestorAlojamiento)
@@ -306,7 +310,7 @@ def comunicacion():
         res_g = Graph()
         res_content = ECSDI['Pedir_plan_viaje']
         res_g.add((res_content, RDF.type, ECSDI.Pedir_plan_viaje))
-        res_g.add((res_content, ECSDI.transport, transport))
+        res_g.add((res_content, ECSDI.transport, Literal(transport_name)))
         res_g.add((res_content, ECSDI.alojamiento, alojamiento))
         res_g.add((res_content, ECSDI.aloj_precio, aloj_precio))
         res_g.add((res_content, ECSDI.aloj_estrellas, aloj_estrellas))
