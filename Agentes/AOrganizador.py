@@ -242,63 +242,14 @@ def comunicacion():
         data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
         presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
         pref_Transportes = eval(gm.value(subject=content, predicate=ECSDI.Preferencias_Medio_Transporte))
+        pref_Alojamientos = eval(gm.value(subject=content, predicate=ECSDI.Preferencias_Alojamiento))
+        min_estrellas = eval(gm.value(subject=content, predicate=ECSDI.Estrellas))
 
         # Buscamos Transporte
-        gr = find_agent_info(DSO.GestorTransporte)
-        msg = gr.value(predicate=RDF.type, object=ACL.FipaAclMessage)
-        content = gr.value(subject=msg, predicate=ACL.content)
-        trans_addr = gr.value(subject=content, predicate=DSO.Address)
-
-        trans_g = Graph()
-        tp_content = ECSDI['Pedir_plan_viaje']
-        trans_g.add((tp_content, RDF.type, ECSDI.Pedir_plan_viaje))
-        trans_g.add((tp_content, ECSDI.Destino, Literal(destino)))
-        trans_g.add((tp_content, ECSDI.Data_Ini, Literal(data_ini)))
-        trans_g.add((tp_content, ECSDI.Data_Fi, Literal(data_fi)))
-        trans_g.add((tp_content, ECSDI.Presupuesto, Literal(presupuesto)))
-        trans_g.add((tp_content, ECSDI.Preferencias_Medio_Transporte, Literal(pref_Transportes)))
-
-        deg = build_message(trans_g,
-                            ACL.request,
-                            sender=AgenteOrganizador.uri,
-                            msgcnt=mss_cnt,
-                            content=tp_content)
-        tp_res = send_message(deg, trans_addr)
-
-        for s, o, p in tp_res:
-            print(s, o, p)
-
-
-        tp_m = get_message_properties(tp_res)
-        transport = tp_m['content']
-        logger.info("Transport: %s", transport)
+        transport_name, transport_price = pedir_transporte(destino, data_ini, data_fi, pref_Transportes)
 
         # Buscamos Alojamiento
-        gr_a = find_agent_info(DSO.GestorAlojamiento)
-        msg_a = gr_a.value(predicate=RDF.type, object=ACL.FipaAclMessage)
-        content_a = gr_a.value(subject=msg_a, predicate=ACL.content)
-        aloj_addr = gr_a.value(subject=content_a, predicate=DSO.Address)
-
-        aloj_g = Graph()
-        aj_content = ECSDI['Pedir_plan_viaje']
-        aloj_g.add((aj_content, RDF.type, ECSDI.Pedir_plan_viaje))
-        aloj_g.add((aj_content, ECSDI.Destino, Literal(destino)))
-        aloj_g.add((aj_content, ECSDI.Gente, Literal(gente)))
-        aloj_g.add((aj_content, ECSDI.Data_Ini, Literal(data_ini)))
-        aloj_g.add((aj_content, ECSDI.Data_Fi, Literal(data_fi)))
-        aloj_g.add((aj_content, ECSDI.Presupuesto, Literal(presupuesto, datatype=XSD.integer)))
-
-        deg_a = build_message(aloj_g,
-                            ACL.request,
-                            sender=AgenteOrganizador.uri,
-                            msgcnt=mss_cnt,
-                            content=aj_content)
-        aj_res = send_message(deg_a, aloj_addr)
-        aj_m = get_message_properties(aj_res)
-        aj_cont = aj_m['content']
-        alojamiento = aj_res.value(subject=aj_cont, predicate=ECSDI.alojamiento)
-        aloj_precio = aj_res.value(subject=aj_cont, predicate=ECSDI.precio_aloj)
-        aloj_estrellas = aj_res.value(subject=aj_cont, predicate=ECSDI.estrellas_aloj)
+        alojam_name, alojam_price, alojam_estrellas = pedir_alojamiento(destino, data_ini, data_fi, pref_Alojamientos, min_estrellas)
 
         # Buscamos Activities.Activity.Activity
 
@@ -306,10 +257,11 @@ def comunicacion():
         res_g = Graph()
         res_content = ECSDI['Pedir_plan_viaje']
         res_g.add((res_content, RDF.type, ECSDI.Pedir_plan_viaje))
-        res_g.add((res_content, ECSDI.transport, transport))
-        res_g.add((res_content, ECSDI.alojamiento, alojamiento))
-        res_g.add((res_content, ECSDI.aloj_precio, aloj_precio))
-        res_g.add((res_content, ECSDI.aloj_estrellas, aloj_estrellas))
+        res_g.add((res_content, ECSDI.transport, Literal(transport_name)))
+        res_g.add((res_content, ECSDI.transport_precio, Literal(transport_price)))
+        res_g.add((res_content, ECSDI.alojamiento, Literal(alojam_name)))
+        res_g.add((res_content, ECSDI.aloj_precio, Literal(alojam_price)))
+        res_g.add((res_content, ECSDI.aloj_estrellas, Literal(alojam_estrellas)))
         gr = build_message(res_g,
                             ACL['inform'],
                             sender=AgenteOrganizador.uri,
@@ -325,7 +277,69 @@ def comunicacion():
     return gr.serialize(format='xml')
 
 
+def pedir_transporte(destino, data_ini, data_fi, pref_Transportes):
+     # Buscamos Transporte
+    gr = find_agent_info(DSO.GestorTransporte)
+    msg = gr.value(predicate=RDF.type, object=ACL.FipaAclMessage)
+    content = gr.value(subject=msg, predicate=ACL.content)
+    trans_addr = gr.value(subject=content, predicate=DSO.Address)
 
+    trans_g = Graph()
+    tp_content = ECSDI['Pedir_plan_viaje']
+    trans_g.add((tp_content, RDF.type, ECSDI.Pedir_plan_viaje))
+    trans_g.add((tp_content, ECSDI.Destino, Literal(destino)))
+    trans_g.add((tp_content, ECSDI.Data_Ini, Literal(data_ini)))
+    trans_g.add((tp_content, ECSDI.Data_Fi, Literal(data_fi)))
+    trans_g.add((tp_content, ECSDI.Preferencias_Medio_Transporte, Literal(pref_Transportes)))
+
+    deg = build_message(trans_g,
+                        ACL.request,
+                        sender=AgenteOrganizador.uri,
+                        msgcnt=mss_cnt,
+                        content=tp_content)
+    tp_res = send_message(deg, trans_addr)
+    rm = get_message_properties(tp_res)
+    transport = rm['content']
+    if transport.toPython() == "OPTIONS AVAILABLE":
+        for medio_t in tp_res.subjects(RDF.type, ECSDI.Medio_De_Transporte):
+            #There should only be one inside the list
+            transport_name = tp_res.value(subject=medio_t, predicate=ECSDI.Nombre).toPython()
+            transport_price = tp_res.value(subject=medio_t, predicate=ECSDI.Precio).toPython()
+            return transport_name, transport_price
+    return None, None
+
+def pedir_alojamiento(destino, data_ini, data_fi, pref_Alojamientos, min_estrellas):
+     # Buscamos Transporte
+    gr = find_agent_info(DSO.GestorAlojamiento)
+    msg = gr.value(predicate=RDF.type, object=ACL.FipaAclMessage)
+    content = gr.value(subject=msg, predicate=ACL.content)
+    aloj_addr = gr.value(subject=content, predicate=DSO.Address)
+
+    aloj = Graph()
+    aj_content = ECSDI['Pedir_plan_viaje']
+    aloj.add((aj_content, RDF.type, ECSDI.Pedir_plan_viaje))
+    aloj.add((aj_content, ECSDI.Destino, Literal(destino)))
+    aloj.add((aj_content, ECSDI.Data_Ini, Literal(data_ini)))
+    aloj.add((aj_content, ECSDI.Data_Fi, Literal(data_fi)))
+    aloj.add((aj_content, ECSDI.Preferencias_Alojamiento, Literal(pref_Alojamientos)))
+    aloj.add((aj_content, ECSDI.Estrellas, Literal(min_estrellas)))
+
+    deg = build_message(aloj,
+                        ACL.request,
+                        sender=AgenteOrganizador.uri,
+                        msgcnt=mss_cnt,
+                        content=aj_content)
+    aj_res = send_message(deg, aloj_addr)
+    aj_m = get_message_properties(aj_res)
+    aj_cont = aj_m['content']
+    if aj_cont.toPython() == "OPTIONS AVAILABLE":
+        for medio_t in aj_res.subjects(RDF.type, ECSDI.Alojamiento):
+            #There should only be one inside the list
+            aloj_name = aj_res.value(subject=medio_t, predicate=ECSDI.Nombre).toPython()
+            aloj_price = aj_res.value(subject=medio_t, predicate=ECSDI.Precio).toPython()
+            aloj_stars = aj_res.value(subject=medio_t, predicate=ECSDI.Estrellas).toPython()
+            return aloj_name, aloj_price, aloj_stars
+    return None, None, None
 
 def tidyup():
     """

@@ -224,20 +224,19 @@ def comunicacion():
             accion = gm.value(subject=content, predicate=RDF.type)
             if accion == ECSDI.Pedir_plan_viaje:        
                 destino = gm.value(subject=content, predicate=ECSDI.Destino)
-                gente = gm.value(subject=content, predicate=ECSDI.Gente)
                 data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
                 data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
-                presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
+                min_estrellas = gm.value(subject=content, predicate=ECSDI.Estrellas)
+                pref_alojamientos = gm.value(subject=content, predicate=ECSDI.Preferencias_Alojamiento)
 
                 address = 'http://%s:%d/alojamiento' % (ahostname, aport)
                 gg = Graph()
                 tp_content = ECSDI['Pedir_plan_viaje']
                 gg.add((tp_content, RDF.type, ECSDI.Pedir_plan_viaje))
                 gg.add((tp_content, ECSDI.Destino, Literal(destino)))
-                gg.add((tp_content, ECSDI.Gente, Literal(gente)))
                 gg.add((tp_content, ECSDI.Data_Ini, Literal(data_ini)))
                 gg.add((tp_content, ECSDI.Data_Fi, Literal(data_fi)))
-                gg.add((tp_content, ECSDI.Presupuesto, Literal(presupuesto, datatype=XSD.integer)))
+                gg.add((tp_content, ECSDI.Preferencias_Alojamiento, Literal(pref_alojamientos)))
                 deg = build_message(gg,
                                   ACL.request,
                                   sender=GestorAlojamiento.uri,
@@ -247,10 +246,45 @@ def comunicacion():
                 rm = get_message_properties(r)
                 content = rm['content']
 
-                gr = build_message(r,
+                if content.toPython() == "OPTIONS AVAILABLE":
+                    lowest_price = 10000000
+                    
+                    #search for best price
+                    for alojamiento in r.subjects(RDF.type, ECSDI.Alojamiento):
+                        
+                        if lowest_price > r.value(subject=alojamiento, predicate=ECSDI.Precio).toPython() \
+                            and r.value(subject=alojamiento, predicate=ECSDI.Nombre).toPython() in pref_alojamientos \
+                                and r.value(subject=alojamiento, predicate=ECSDI.Estrellas).toPython() > min_estrellas.toPython():
+                            lowest_subject = alojamiento
+                            lowest_name = r.value(subject=alojamiento, predicate=ECSDI.Nombre)
+                            lowest_price = r.value(subject=alojamiento, predicate=ECSDI.Precio).toPython()
+                            lowest_star = r.value(subject=alojamiento, predicate=ECSDI.Estrellas).toPython()
+                    
+                    grespuesta = Graph()
+                    grespuesta.add((lowest_subject, RDF.type, ECSDI.Alojamiento))
+                    grespuesta.add((lowest_subject, ECSDI.Nombre, Literal(lowest_name, datatype=XSD.string)))
+                    grespuesta.add((lowest_subject, ECSDI.Precio, Literal(lowest_price, datatype=XSD.integer)))
+                    grespuesta.add((lowest_subject, ECSDI.Estrellas, Literal(lowest_star, datatype=XSD.integer)))
+
+                    print("#### RESULTADO QUERY ####")
+                    for alojamiento in grespuesta.subjects(RDF.type, ECSDI.Alojamiento):
+                        print(destino,
+                            grespuesta.value(subject=alojamiento, predicate=ECSDI.Nombre),
+                            grespuesta.value(subject=alojamiento, predicate=ECSDI.Precio),
+                            grespuesta.value(subject=alojamiento, predicate=ECSDI.Estrellas))
+                    
+                    #SEND BEST OPTION CALCULATED
+                    gr = Graph()
+                    gr = build_message(grespuesta,
+                            ACL['inform'],
+                            sender=GestorAlojamiento.uri,
+                            content=content).serialize(format='xml')
+                else:
+                    gr = build_message(Graph(),
                         ACL['inform'],
                         sender=GestorAlojamiento.uri,
-                        content=content).serialize(format='xml')
+                        content=Literal("NO OPTIONS AVAILABLE")).serialize(format='xml')
+
             else:
                 gr = build_message(Graph(),
                         ACL['inform'],
@@ -258,7 +292,6 @@ def comunicacion():
                         content=Literal("NO ENTIENDO")).serialize(format='xml')
 
     mss_cnt += 1
-
 
     logger.info('Respondemos a la peticion')
 

@@ -266,7 +266,7 @@ def comunicacion():
                             grespuesta.value(subject=medio_t, predicate=ECSDI.Nombre),
                             grespuesta.value(subject=medio_t, predicate=ECSDI.Precio))
                     
-                    #SEND BEST OPTION CALCULATED
+                    #SEND BEST
                     gr = Graph()
                     gr = build_message(grespuesta,
                             ACL['inform'],
