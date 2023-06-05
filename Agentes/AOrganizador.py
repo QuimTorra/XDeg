@@ -247,13 +247,9 @@ def comunicacion():
 
         # Buscamos Transporte
         transport_name, transport_price = pedir_transporte(destino, data_ini, data_fi, pref_Transportes)
-        #logger.info("Found Transport: %s, with price: %d", transport_name, transport_price)
-
-
 
         # Buscamos Alojamiento
         alojam_name, alojam_price, alojam_estrellas = pedir_alojamiento(destino, data_ini, data_fi, pref_Alojamientos, min_estrellas)
-        #logger.info("Found Alojamiento: %s, %d stars, with price: %d ", alojam_name,  alojam_estrellas, alojam_price)
 
         # Buscamos Activities.Activity.Activity
 
@@ -262,6 +258,7 @@ def comunicacion():
         res_content = ECSDI['Pedir_plan_viaje']
         res_g.add((res_content, RDF.type, ECSDI.Pedir_plan_viaje))
         res_g.add((res_content, ECSDI.transport, Literal(transport_name)))
+        res_g.add((res_content, ECSDI.transport_precio, Literal(transport_price)))
         res_g.add((res_content, ECSDI.alojamiento, Literal(alojam_name)))
         res_g.add((res_content, ECSDI.aloj_precio, Literal(alojam_price)))
         res_g.add((res_content, ECSDI.aloj_estrellas, Literal(alojam_estrellas)))

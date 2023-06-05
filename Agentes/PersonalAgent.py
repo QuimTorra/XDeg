@@ -234,15 +234,16 @@ def hacer_plan():
         msgdic = get_message_properties(rr)
         res_content = msgdic['content']
         transport = rr.value(subject=res_content, predicate=ECSDI.transport)
+        transport_price = rr.value(subject=res_content, predicate=ECSDI.transport_precio)
         alojamiento = rr.value(subject=res_content, predicate=ECSDI.alojamiento)
         aloj_precio = rr.value(subject=res_content, predicate=ECSDI.aloj_precio)
         aloj_estrellas = rr.value(subject=res_content, predicate=ECSDI.aloj_estrellas)
-        print(alojamiento, aloj_precio, aloj_estrellas)
+        tp_view = transport + ' : ' + transport_price + '€' 
         aloj_view = alojamiento + ' (' + ('⭐'*int(aloj_estrellas)) + ')' + " : " + aloj_precio + '€'
     
 
         #Plan result
-        return render_template('rplan.html', transport=transport, alojamiento=aloj_view)
+        return render_template('rplan.html', transport=tp_view, alojamiento=aloj_view)
 
 
 @app.route("/stop")
