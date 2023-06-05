@@ -133,28 +133,22 @@ def getActividades():
 
   #accion (La peticion es valida)
   accion = gm.value(subject=content, predicate=RDF.type)
-  if accion == ECSDI.Pedir_plan_viaje:        
+  if accion == ECSDI.Pedir_actividades: 
     destino = gm.value(subject=content, predicate=ECSDI.Destino)
     data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
     data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
     presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
     actividades = gm.value(subject=content, predicate=ECSDI.actividades)
 
-    if (True): 
     #   res = tipo_actividades[random.randint(0, len(tipo_actividades)-1)]
-      res = Graph()
-      ac_content = ECSDI['Pedir_plan_viaje']
-      a = "degactividades"
-      res.add((ac_content, ECSDI.actividades, Literal(a)))
-      gr = build_message(res,
-                        ACL['inform'],
-                        sender=AgenciaActividades.uri,
-                        content=ac_content).serialize(format='xml')
-    else:  
-      gr = build_message(Graph(),
-                          ACL['inform'],
-                          sender=AgenciaActividades.uri,
-                          content=Literal("NO OPTIONS AVAILABLE")).serialize(format='xml')
+    res = Graph()
+    ac_content = ECSDI['Pedir_plan_viaje']
+    a = "degactividades"
+    res.add((ac_content, ECSDI.actividades, Literal(a)))
+    gr = build_message(res,
+                    ACL['inform'],
+                    sender=AgenciaActividades.uri,
+                    content=ac_content).serialize(format='xml')
   else:  
     gr = build_message(Graph(),
                         ACL['inform'],
