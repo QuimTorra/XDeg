@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-filename: AgenteOrganizador 
+filename: AgenteGestorAlojamiento
 
 Antes de ejecutar hay que añadir la raiz del proyecto a la variable PYTHONPATH
 
-Agente que se comunica con otros agentes para organizar un viaje para un determinado usuario.
+Agente que se registra como agente de Gestor de Transporte y espera peticiones
 
 @author: javier
 """
@@ -53,7 +53,7 @@ args = parser.parse_args()
 
 # Configuration stuff
 if args.port is None:
-    port = 9010
+    port = 9012
 else:
     port = args.port
 
@@ -76,7 +76,7 @@ else:
     dhostname = args.dhost
 
 if args.aport is None:
-    aport = 9050
+    aport = 9051
 else:
     aport = args.aport
 
@@ -98,8 +98,8 @@ agn = Namespace("http://www.agentes.org#")
 mss_cnt = 0
 
 # Datos del Agente
-AgenteOrganizador = Agent('AgenteOrganizador',
-                  agn.AgenteOrganizador,
+GestorAlojamiento = Agent('GestorAlojamiento',
+                  agn.GestorAlojamiento,
                   'http://%s:%d/comm' % (hostaddr, port),
                   'http://%s:%d/Stop' % (hostaddr, port))
 
@@ -115,38 +115,6 @@ dsgraph = Graph()
 # Cola de comunicacion entre procesos
 cola1 = Queue()
 
-def find_agent_info(type):
-    """
-    Busca en el servicio de registro mandando un
-    mensaje de request con una accion Seach del servicio de directorio
-
-    Podria ser mas adecuado mandar un query-ref y una descripcion de registo
-    con variables
-
-    :param type:
-    :return:
-    """
-    global mss_cnt
-    logger.info('Buscamos en el servicio de registro')
-
-    gmess = Graph()
-
-    gmess.bind('foaf', FOAF)
-    gmess.bind('dso', DSO)
-    reg_obj = agn[AgenteOrganizador.name + '-search']
-    gmess.add((reg_obj, RDF.type, DSO.Search))
-    gmess.add((reg_obj, DSO.AgentType, type))
-
-    msg = build_message(gmess, perf=ACL.request,
-                        sender=AgenteOrganizador.uri,
-                        receiver=DirectoryAgent.uri,
-                        content=reg_obj,
-                        msgcnt=mss_cnt)
-    gr = send_message(msg, DirectoryAgent.address)
-    mss_cnt += 1
-    logger.info('Recibimos informacion del agente')
-
-    return gr
 
 def register_message():
     """
@@ -167,17 +135,17 @@ def register_message():
     # Construimos el mensaje de registro
     gmess.bind('foaf', FOAF)
     gmess.bind('dso', DSO)
-    reg_obj = agn[AgenteOrganizador.name + '-Register']
+    reg_obj = agn[GestorAlojamiento.name + '-Register']
     gmess.add((reg_obj, RDF.type, DSO.Register))
-    gmess.add((reg_obj, DSO.Uri, AgenteOrganizador.uri))
-    gmess.add((reg_obj, FOAF.name, Literal(AgenteOrganizador.name)))
-    gmess.add((reg_obj, DSO.Address, Literal(AgenteOrganizador.address)))
-    gmess.add((reg_obj, DSO.AgentType, DSO.AgenteOrganizador))
+    gmess.add((reg_obj, DSO.Uri, GestorAlojamiento.uri))
+    gmess.add((reg_obj, FOAF.name, Literal(GestorAlojamiento.name)))
+    gmess.add((reg_obj, DSO.Address, Literal(GestorAlojamiento.address)))
+    gmess.add((reg_obj, DSO.AgentType, DSO.GestorAlojamiento))
 
     # Lo metemos en un envoltorio FIPA-ACL y lo enviamos
     gr = send_message(
         build_message(gmess, perf=ACL.request,
-                      sender=AgenteOrganizador.uri,
+                      sender=GestorAlojamiento.uri,
                       receiver=DirectoryAgent.uri,
                       content=reg_obj,
                       msgcnt=mss_cnt),
@@ -232,97 +200,69 @@ def comunicacion():
     gm.parse(data=message, format='xml')
 
     msgdic = get_message_properties(gm)
-    content = msgdic['content']
 
-    accion = gm.value(subject=content, predicate=RDF.type)
-    if accion == ECSDI.Pedir_plan_viaje:        
-        destino = gm.value(subject=content, predicate=ECSDI.Destino)
-        gente = gm.value(subject=content, predicate=ECSDI.Gente)
-        data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
-        data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
-        presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
-        pref_Transportes = eval(gm.value(subject=content, predicate=ECSDI.Preferencias_Medio_Transporte))
+    # Comprobamos que sea un mensaje FIPA ACL
+    if msgdic is None:
+        # Si no es, respondemos que no hemos entendido el mensaje
+        gr = build_message(Graph(), ACL['not-understood'], sender=GestorAlojamiento.uri, msgcnt=mss_cnt)
+    else:
+        # Obtenemos la performativa
+        perf = msgdic['performative']
 
-        # Buscamos Transporte
-        gr = find_agent_info(DSO.GestorTransporte)
-        msg = gr.value(predicate=RDF.type, object=ACL.FipaAclMessage)
-        content = gr.value(subject=msg, predicate=ACL.content)
-        trans_addr = gr.value(subject=content, predicate=DSO.Address)
+        if perf != ACL.request:
+            # Si no es un request, respondemos que no hemos entendido el mensaje
+            gr = build_message(Graph(), ACL['not-understood'], sender=GestorAlojamiento.uri, msgcnt=mss_cnt)
+        else:
+            # Extraemos el objeto del contenido que ha de ser una accion de la ontologia de acciones del agente
+            # de registro
 
-        trans_g = Graph()
-        tp_content = ECSDI['Pedir_plan_viaje']
-        trans_g.add((tp_content, RDF.type, ECSDI.Pedir_plan_viaje))
-        trans_g.add((tp_content, ECSDI.Destino, Literal(destino)))
-        trans_g.add((tp_content, ECSDI.Data_Ini, Literal(data_ini)))
-        trans_g.add((tp_content, ECSDI.Data_Fi, Literal(data_fi)))
-        trans_g.add((tp_content, ECSDI.Presupuesto, Literal(presupuesto)))
-        trans_g.add((tp_content, ECSDI.Preferencias_Medio_Transporte, Literal(pref_Transportes)))
+            # Averiguamos el tipo de la accion
+            if 'content' in msgdic:
+                content = msgdic['content']
+                accion = gm.value(subject=content, predicate=RDF.type)
 
-        deg = build_message(trans_g,
-                            ACL.request,
-                            sender=AgenteOrganizador.uri,
-                            msgcnt=mss_cnt,
-                            content=tp_content)
-        tp_res = send_message(deg, trans_addr)
+            accion = gm.value(subject=content, predicate=RDF.type)
+            if accion == ECSDI.Pedir_plan_viaje:        
+                destino = gm.value(subject=content, predicate=ECSDI.Destino)
+                gente = gm.value(subject=content, predicate=ECSDI.Gente)
+                data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
+                data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
+                presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
 
-        for s, o, p in tp_res:
-            print(s, o, p)
+                address = 'http://%s:%d/alojamiento' % (ahostname, aport)
+                gg = Graph()
+                tp_content = ECSDI['Pedir_plan_viaje']
+                gg.add((tp_content, RDF.type, ECSDI.Pedir_plan_viaje))
+                gg.add((tp_content, ECSDI.Destino, Literal(destino)))
+                gg.add((tp_content, ECSDI.Gente, Literal(gente)))
+                gg.add((tp_content, ECSDI.Data_Ini, Literal(data_ini)))
+                gg.add((tp_content, ECSDI.Data_Fi, Literal(data_fi)))
+                gg.add((tp_content, ECSDI.Presupuesto, Literal(presupuesto, datatype=XSD.integer)))
+                deg = build_message(gg,
+                                  ACL.request,
+                                  sender=GestorAlojamiento.uri,
+                                  msgcnt=mss_cnt,
+                                  content=tp_content)
+                r = send_message(deg, address)
+                rm = get_message_properties(r)
+                content = rm['content']
 
-
-        tp_m = get_message_properties(tp_res)
-        transport = tp_m['content']
-        logger.info("Transport: %s", transport)
-
-        # Buscamos Alojamiento
-        gr_a = find_agent_info(DSO.GestorAlojamiento)
-        msg_a = gr_a.value(predicate=RDF.type, object=ACL.FipaAclMessage)
-        content_a = gr_a.value(subject=msg_a, predicate=ACL.content)
-        aloj_addr = gr_a.value(subject=content_a, predicate=DSO.Address)
-
-        aloj_g = Graph()
-        aj_content = ECSDI['Pedir_plan_viaje']
-        aloj_g.add((aj_content, RDF.type, ECSDI.Pedir_plan_viaje))
-        aloj_g.add((aj_content, ECSDI.Destino, Literal(destino)))
-        aloj_g.add((aj_content, ECSDI.Gente, Literal(gente)))
-        aloj_g.add((aj_content, ECSDI.Data_Ini, Literal(data_ini)))
-        aloj_g.add((aj_content, ECSDI.Data_Fi, Literal(data_fi)))
-        aloj_g.add((aj_content, ECSDI.Presupuesto, Literal(presupuesto, datatype=XSD.integer)))
-
-        deg_a = build_message(aloj_g,
-                            ACL.request,
-                            sender=AgenteOrganizador.uri,
-                            msgcnt=mss_cnt,
-                            content=aj_content)
-        aj_res = send_message(deg_a, aloj_addr)
-        aj_m = get_message_properties(aj_res)
-        aj_cont = aj_m['content']
-        alojamiento = aj_res.value(subject=aj_cont, predicate=ECSDI.alojamiento)
-        aloj_precio = aj_res.value(subject=aj_cont, predicate=ECSDI.precio_aloj)
-        aloj_estrellas = aj_res.value(subject=aj_cont, predicate=ECSDI.estrellas_aloj)
-
-        # Buscamos Activities.Activity.Activity
-
-        # Construimos la respuesta
-        res_g = Graph()
-        res_content = ECSDI['Pedir_plan_viaje']
-        res_g.add((res_content, RDF.type, ECSDI.Pedir_plan_viaje))
-        res_g.add((res_content, ECSDI.transport, transport))
-        res_g.add((res_content, ECSDI.alojamiento, alojamiento))
-        res_g.add((res_content, ECSDI.aloj_precio, aloj_precio))
-        res_g.add((res_content, ECSDI.aloj_estrellas, aloj_estrellas))
-        gr = build_message(res_g,
-                            ACL['inform'],
-                            sender=AgenteOrganizador.uri,
-                            msgcnt=mss_cnt,
-                            receiver=msgdic['sender'],
-                            content=res_content)
+                gr = build_message(r,
+                        ACL['inform'],
+                        sender=GestorAlojamiento.uri,
+                        content=content).serialize(format='xml')
+            else:
+                gr = build_message(Graph(),
+                        ACL['inform'],
+                        sender=GestorAlojamiento.uri,
+                        content=Literal("NO ENTIENDO")).serialize(format='xml')
 
     mss_cnt += 1
 
 
     logger.info('Respondemos a la peticion')
 
-    return gr.serialize(format='xml')
+    return gr
 
 
 
