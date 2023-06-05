@@ -198,6 +198,7 @@ def hacer_plan():
 
         #GET INFO FORM
         destination = request.form['tp_destination']
+        people = request.form['tp_people']
         date_Ini = request.form['dateIni']
         date_Fi = request.form['dateEnd'] 
         presupost = request.form['presupost']
@@ -212,10 +213,12 @@ def hacer_plan():
         contentResult = ECSDI['Pedir_plan_viaje_'+ str(get_count())]
         gr.add((contentResult, RDF.type, ECSDI.Pedir_plan_viaje))
         gr.add((contentResult, ECSDI.Destino, Literal(destination, datatype=XSD.string)))
+        gr.add((contentResult, ECSDI.Gente, Literal(people, datatype=XSD.string)))
         gr.add((contentResult, ECSDI.Data_Ini, Literal(date_Ini, datatype=XSD.date)))
         gr.add((contentResult, ECSDI.Data_Fi, Literal(date_Fi, datatype=XSD.date)))
         gr.add((contentResult, ECSDI.Presupuesto, Literal(presupost, datatype=XSD.integer)))
         gr.add((contentResult, ECSDI.Preferencias_Medio_Transporte, Literal(str(pref_trans), datatype=XSD.string)))
+        
 
         deg = build_message(gr,
                                ACL['request'],
@@ -227,8 +230,15 @@ def hacer_plan():
         msgdic = get_message_properties(rr)
         res_content = msgdic['content']
         transport = rr.value(subject=res_content, predicate=ECSDI.transport)
+        alojamiento = rr.value(subject=res_content, predicate=ECSDI.alojamiento)
+        aloj_precio = rr.value(subject=res_content, predicate=ECSDI.aloj_precio)
+        aloj_estrellas = rr.value(subject=res_content, predicate=ECSDI.aloj_estrellas)
+        print(alojamiento, aloj_precio, aloj_estrellas)
+        aloj_view = alojamiento + ' (' + ('⭐'*int(aloj_estrellas)) + ')' + " : " + aloj_precio + '€'
+    
 
-        return render_template('rplan.html', transport=transport)
+        #Plan result
+        return render_template('rplan.html', transport=transport, alojamiento=aloj_view)
 
 
 @app.route("/stop")

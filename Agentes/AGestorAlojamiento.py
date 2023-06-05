@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-filename: AgenteGestorTransporte
+filename: AgenteGestorAlojamiento
 
 Antes de ejecutar hay que añadir la raiz del proyecto a la variable PYTHONPATH
 
@@ -14,8 +14,8 @@ import logging
 import argparse
 
 from flask import Flask, request
-from rdflib import Graph, Namespace, Literal
-from rdflib.namespace import FOAF, RDF, XSD
+from rdflib import XSD, Graph, Namespace, Literal
+from rdflib.namespace import FOAF, RDF
 import requests
 
 from AgentUtil.ACL import ACL
@@ -53,7 +53,7 @@ args = parser.parse_args()
 
 # Configuration stuff
 if args.port is None:
-    port = 9011
+    port = 9012
 else:
     port = args.port
 
@@ -76,7 +76,7 @@ else:
     dhostname = args.dhost
 
 if args.aport is None:
-    aport = 9050
+    aport = 9051
 else:
     aport = args.aport
 
@@ -98,8 +98,8 @@ agn = Namespace("http://www.agentes.org#")
 mss_cnt = 0
 
 # Datos del Agente
-GestorTransporte = Agent('GestorTransporte',
-                  agn.GestorTransporte,
+GestorAlojamiento = Agent('GestorAlojamiento',
+                  agn.GestorAlojamiento,
                   'http://%s:%d/comm' % (hostaddr, port),
                   'http://%s:%d/Stop' % (hostaddr, port))
 
@@ -135,17 +135,17 @@ def register_message():
     # Construimos el mensaje de registro
     gmess.bind('foaf', FOAF)
     gmess.bind('dso', DSO)
-    reg_obj = agn[GestorTransporte.name + '-Register']
+    reg_obj = agn[GestorAlojamiento.name + '-Register']
     gmess.add((reg_obj, RDF.type, DSO.Register))
-    gmess.add((reg_obj, DSO.Uri, GestorTransporte.uri))
-    gmess.add((reg_obj, FOAF.name, Literal(GestorTransporte.name)))
-    gmess.add((reg_obj, DSO.Address, Literal(GestorTransporte.address)))
-    gmess.add((reg_obj, DSO.AgentType, DSO.GestorTransporte))
+    gmess.add((reg_obj, DSO.Uri, GestorAlojamiento.uri))
+    gmess.add((reg_obj, FOAF.name, Literal(GestorAlojamiento.name)))
+    gmess.add((reg_obj, DSO.Address, Literal(GestorAlojamiento.address)))
+    gmess.add((reg_obj, DSO.AgentType, DSO.GestorAlojamiento))
 
     # Lo metemos en un envoltorio FIPA-ACL y lo enviamos
     gr = send_message(
         build_message(gmess, perf=ACL.request,
-                      sender=GestorTransporte.uri,
+                      sender=GestorAlojamiento.uri,
                       receiver=DirectoryAgent.uri,
                       content=reg_obj,
                       msgcnt=mss_cnt),
@@ -204,14 +204,14 @@ def comunicacion():
     # Comprobamos que sea un mensaje FIPA ACL
     if msgdic is None:
         # Si no es, respondemos que no hemos entendido el mensaje
-        gr = build_message(Graph(), ACL['not-understood'], sender=GestorTransporte.uri, msgcnt=mss_cnt)
+        gr = build_message(Graph(), ACL['not-understood'], sender=GestorAlojamiento.uri, msgcnt=mss_cnt)
     else:
         # Obtenemos la performativa
         perf = msgdic['performative']
 
         if perf != ACL.request:
             # Si no es un request, respondemos que no hemos entendido el mensaje
-            gr = build_message(Graph(), ACL['not-understood'], sender=GestorTransporte.uri, msgcnt=mss_cnt)
+            gr = build_message(Graph(), ACL['not-understood'], sender=GestorAlojamiento.uri, msgcnt=mss_cnt)
         else:
             # Extraemos el objeto del contenido que ha de ser una accion de la ontologia de acciones del agente
             # de registro
@@ -224,67 +224,41 @@ def comunicacion():
             accion = gm.value(subject=content, predicate=RDF.type)
             if accion == ECSDI.Pedir_plan_viaje:        
                 destino = gm.value(subject=content, predicate=ECSDI.Destino)
+                gente = gm.value(subject=content, predicate=ECSDI.Gente)
                 data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
                 data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
-                pref_Transportes = eval(gm.value(subject=content, predicate=ECSDI.Preferencias_Medio_Transporte))
+                presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
 
-                address = 'http://%s:%d/transport' % (ahostname, aport)
+                address = 'http://%s:%d/alojamiento' % (ahostname, aport)
                 gg = Graph()
-                tp_content = ECSDI['Pedir_metodo_transporte']
-                gg.add((tp_content, RDF.type, ECSDI.Pedir_metodo_transporte))
+                tp_content = ECSDI['Pedir_plan_viaje']
+                gg.add((tp_content, RDF.type, ECSDI.Pedir_plan_viaje))
                 gg.add((tp_content, ECSDI.Destino, Literal(destino)))
+                gg.add((tp_content, ECSDI.Gente, Literal(gente)))
                 gg.add((tp_content, ECSDI.Data_Ini, Literal(data_ini)))
                 gg.add((tp_content, ECSDI.Data_Fi, Literal(data_fi)))
+                gg.add((tp_content, ECSDI.Presupuesto, Literal(presupuesto, datatype=XSD.integer)))
                 deg = build_message(gg,
                                   ACL.request,
-                                  sender=GestorTransporte.uri,
+                                  sender=GestorAlojamiento.uri,
                                   msgcnt=mss_cnt,
                                   content=tp_content)
                 r = send_message(deg, address)
                 rm = get_message_properties(r)
-                transport = rm['content']
+                content = rm['content']
 
-                if transport.toPython() == "OPTIONS AVAILABLE":
-                    lowest_price = 10000000
-                    
-                    #search for best price
-                    for medio_t in r.subjects(RDF.type, ECSDI.Medio_De_Transporte):
-                        
-                        if lowest_price > r.value(subject=medio_t, predicate=ECSDI.Precio).toPython() and r.value(subject=medio_t, predicate=ECSDI.Nombre).toPython() in pref_Transportes:
-                            lowest_subject = medio_t
-                            lowest_name = r.value(subject=medio_t, predicate=ECSDI.Nombre)
-                            lowest_price = r.value(subject=medio_t, predicate=ECSDI.Precio).toPython()
-                    
-                    grespuesta = Graph()
-                    grespuesta.add((lowest_subject, RDF.type, ECSDI.Medio_De_Transporte))
-                    grespuesta.add((lowest_subject, ECSDI.Nombre, Literal(lowest_name, datatype=XSD.string)))
-                    grespuesta.add((lowest_subject, ECSDI.Precio, Literal(lowest_price, datatype=XSD.integer)))
-
-                    print("#### RESULTADO QUERY ####")
-                    for medio_t in grespuesta.subjects(RDF.type, ECSDI.Medio_De_Transporte):
-                        print(destino,
-                            grespuesta.value(subject=medio_t, predicate=ECSDI.Nombre),
-                            grespuesta.value(subject=medio_t, predicate=ECSDI.Precio))
-                    
-                    #SEND BEST OPTION CALCULATED
-                    gr = Graph()
-                    gr = build_message(grespuesta,
-                            ACL['inform'],
-                            sender=GestorTransporte.uri,
-                            content=transport).serialize(format='xml')
-                else:
-                    gr = build_message(Graph(),
+                gr = build_message(r,
                         ACL['inform'],
-                        sender=GestorTransporte.uri,
-                        content=Literal("NO OPTIONS AVAILABLE")).serialize(format='xml')
-
+                        sender=GestorAlojamiento.uri,
+                        content=content).serialize(format='xml')
             else:
                 gr = build_message(Graph(),
                         ACL['inform'],
-                        sender=GestorTransporte.uri,
+                        sender=GestorAlojamiento.uri,
                         content=Literal("NO ENTIENDO")).serialize(format='xml')
 
     mss_cnt += 1
+
 
     logger.info('Respondemos a la peticion')
 

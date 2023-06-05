@@ -6,7 +6,7 @@ from flask import Flask, request, Response
 from flask.json import jsonify
 import json
 import argparse
-from rdflib import FOAF, RDF, Graph, Literal, Namespace, XSD
+from rdflib import FOAF, RDF, XSD, Graph, Literal, Namespace
 import requests
 import logging
 from requests import ConnectionError
@@ -43,7 +43,7 @@ args = parser.parse_args()
 
 # Configuration stuff
 if args.port is None:
-    port = 9050
+    port = 9051
 else:
     port = args.port
 
@@ -69,31 +69,12 @@ app = Flask(__name__)
 
 agn = Namespace("http://www.agentes.org#")
 
-AgenciaTransporte = Agent('AgenciaTransporte',
-                    agn.AgenciaTransporte,
+AgenciaAlojamiento = Agent('AgenciaAlojamiento',
+                    agn.AgenciaAlojamiento,
                     'http://%s:%d/comm' % (hostaddr, port),
                     'http://%s:%d/Stop' % (hostaddr, port))
 
 mss_cnt = 0
-
-ontologyFile = open('../data/Medio_Transporte_BD.rdf')
-fuente_Datos = Graph()
-fuente_Datos = fuente_Datos.parse(ontologyFile)
-
-#CHECKOUT DATABASE
-# print('######')
-# for medio_t in fuente_Datos.subjects(RDF.type, ECSDI.Medio_De_Transporte):
-#     print(fuente_Datos.value(subject=medio_t, predicate=ECSDI.Pertenece_a),
-#           fuente_Datos.value(subject=fuente_Datos.value(subject=medio_t, predicate=ECSDI.Pertenece_a), predicate=ECSDI.Nombre),
-#           fuente_Datos.value(subject=medio_t, predicate=ECSDI.Nombre),
-#           fuente_Datos.value(subject=medio_t, predicate=ECSDI.Precio))
-# print('######')
-def get_count():
-    global mss_cnt
-    if not mss_cnt:
-        mss_cnt = 0
-    mss_cnt += 1
-    return mss_cnt
 
 def register_message():
     """
@@ -115,17 +96,17 @@ def register_message():
     # Construimos el mensaje de registro
     gmess.bind('foaf', FOAF)
     gmess.bind('dso', DSO)
-    reg_obj = agn[AgenciaTransporte.name + '-Register']
+    reg_obj = agn[AgenciaAlojamiento.name + '-Register']
     gmess.add((reg_obj, RDF.type, DSO.Register))
-    gmess.add((reg_obj, DSO.Uri, AgenciaTransporte.uri))
-    gmess.add((reg_obj, FOAF.name, Literal(AgenciaTransporte.name)))
-    gmess.add((reg_obj, DSO.Address, Literal(AgenciaTransporte.address)))
-    gmess.add((reg_obj, DSO.AgentType, DSO.AgenciaTransporte))
+    gmess.add((reg_obj, DSO.Uri, AgenciaAlojamiento.uri))
+    gmess.add((reg_obj, FOAF.name, Literal(AgenciaAlojamiento.name)))
+    gmess.add((reg_obj, DSO.Address, Literal(AgenciaAlojamiento.address)))
+    gmess.add((reg_obj, DSO.AgentType, DSO.AgenciaAlojamiento))
 
     # Lo metemos en un envoltorio FIPA-ACL y lo enviamos
     gr = send_message(
         build_message(gmess, perf=ACL.request,
-                      sender=AgenciaTransporte.uri,
+                      sender=AgenciaAlojamiento.uri,
                       receiver=DirectoryAgent.uri,
                       content=reg_obj,
                       msgcnt=mss_cnt),
@@ -139,9 +120,9 @@ def isAlive():
   text = 'Hi i\'m AExtTransporte o/, if you wanna travel go to <a href= /transport?coses=deg>here</a>'
   return text
 
-@app.route("/transport")
-def getTransport():
-  # host:port/transport
+@app.route("/alojamiento")
+def getAlojamiento():
+  # host:port/alojamiento
   
   message = request.args['content']
   gm = Graph()
@@ -152,42 +133,31 @@ def getTransport():
 
   #accion (La peticion es valida)
   accion = gm.value(subject=content, predicate=RDF.type)
-  if accion == ECSDI.Pedir_metodo_transporte:        
+  if accion == ECSDI.Pedir_plan_viaje:        
     destino = gm.value(subject=content, predicate=ECSDI.Destino)
+    gente = gm.value(subject=content, predicate=ECSDI.Gente)
     data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
     data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
+    presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
 
-    grespuesta = Graph()
-    contentResult = ECSDI['Cerca_productes_' + str(get_count())]
-    #OBTAIN FROM DATABASE
-    for medio_t in fuente_Datos.subjects(RDF.type, ECSDI.Medio_De_Transporte):
-        id_destino = fuente_Datos.value(subject=medio_t, predicate=ECSDI.Pertenece_a)
+    estrelles = random.randint(1,5)
+    preu = random.randint(30, 400)
+    allotjament = (["hotel", "apartamento", "casa rural", "camping", "casa de tu madre", "bajo un puente", "deg"])[random.randint(0,6)]
 
-        #Metodo transporte hacia el destiono
-        if fuente_Datos.value(subject=id_destino, predicate=ECSDI.Nombre) == destino:
-            price_trans = fuente_Datos.value(subject=medio_t, predicate=ECSDI.Precio)
-            name_trans = fuente_Datos.value(subject=medio_t, predicate=ECSDI.Nombre)
-
-            medio_trans_ciudad = ECSDI['Medio_De_Transporte_'+ str(get_count())]
-            grespuesta.add((medio_trans_ciudad, RDF.type, ECSDI.Medio_De_Transporte))
-            grespuesta.add((medio_trans_ciudad, ECSDI.Nombre, Literal(name_trans, datatype=XSD.string)))
-            grespuesta.add((medio_trans_ciudad, ECSDI.Precio, Literal(price_trans, datatype=XSD.integer)))
-    
-    print("#### RESULTADO QUERY ####")
-    for medio_t in grespuesta.subjects(RDF.type, ECSDI.Medio_De_Transporte):
-        print(destino,
-            grespuesta.value(subject=medio_t, predicate=ECSDI.Nombre),
-            grespuesta.value(subject=medio_t, predicate=ECSDI.Precio))
-
-    gr = build_message(grespuesta,
+    g = Graph()
+    content = ECSDI['Pedir_plan_viaje']
+    g.add((content, ECSDI.alojamiento, Literal(allotjament)))
+    g.add((content, ECSDI.precio_aloj, Literal(preu, datatype=XSD.integer)))
+    g.add((content, ECSDI.estrellas_aloj, Literal(estrelles, datatype=XSD.integer)))
+    gr = build_message(g,
                     ACL['inform'],
-                    sender=AgenciaTransporte.uri,
-                    content=Literal('OPTIONS AVAILABLE')).serialize(format='xml')
-    
+                    sender=AgenciaAlojamiento.uri,
+                    content=content).serialize(format='xml')
+
   else:  
     gr = build_message(Graph(),
                         ACL['inform'],
-                        sender=AgenciaTransporte.uri,
+                        sender=AgenciaAlojamiento.uri,
                         content=Literal("NO OPTIONS AVAILABLE")).serialize(format='xml')
 
   print("Send location")
