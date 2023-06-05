@@ -134,7 +134,7 @@ def getActividades():
   #accion (La peticion es valida)
   accion = gm.value(subject=content, predicate=RDF.type)
   if accion == ECSDI.Pedir_actividades: 
-    destino = gm.value(subject=content, predicate=ECSDI.Destino)
+    destino = gm.value(subject=content, predicate=ECSDI.Destino).toPython()
     data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
     data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
     presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
@@ -143,7 +143,16 @@ def getActividades():
     #   res = tipo_actividades[random.randint(0, len(tipo_actividades)-1)]
     res = Graph()
     ac_content = ECSDI['Pedir_plan_viaje']
-    a = "degactividades"
+    print(destino)
+    if (destino == "barcelona"):
+       a = "Visita a la Sagrada Família."
+    elif (destino == "paris"):
+       a = "Visita a la Torre Eiffel."
+    elif (destino == "rome"):
+       a = "Degustación comida italiana."
+    elif (destino == "london"):
+       a = "Visita al London Eye."
+       
     res.add((ac_content, ECSDI.actividades, Literal(a)))
     gr = build_message(res,
                     ACL['inform'],
