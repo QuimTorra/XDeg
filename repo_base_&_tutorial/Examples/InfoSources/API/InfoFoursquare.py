@@ -12,9 +12,9 @@ en un area de 4Km a la redonda buscando museos
 Se ha de crear un fichero python APIKeys.py que contenga la información para el
 acceso a FourSquare (FQCLIENT_ID, FQCLIENT_SECRET)
 
-@author: javier
+@author: xDeg
 """
-__author__ = 'javier'
+__author__ = 'xDeg'
 
 import foursquare
 from AgentUtil.APIKeys import FQCLIENT_ID, FQCLIENT_SECRET

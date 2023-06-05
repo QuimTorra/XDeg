@@ -7,7 +7,7 @@ Un subproceso qeu se comunica con el proceso principal con una cola
 Created on 12/02/2014
 """
 
-__author__ = 'javier'
+__author__ = 'xDeg'
 
 from multiprocessing import Process, Queue
 import time

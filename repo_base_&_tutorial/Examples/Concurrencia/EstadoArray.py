@@ -6,13 +6,13 @@ Dis procesos que comparten un array de valores
 
 Created on 12/02/2014
 
-@author: javier
+@author: xDeg
 """
 
 from multiprocessing import Process, Array
 from ctypes import c_int
 
-__author__ = 'javier'
+__author__ = 'xDeg'
 
 
 def proceso1(a):

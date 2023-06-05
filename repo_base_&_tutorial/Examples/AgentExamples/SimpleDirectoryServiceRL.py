@@ -15,7 +15,7 @@ directory-service-ontology.owl
 
 Es identico que SimpleDirectoryAgent pero reescrito como reglas
 
-@author: javier
+@author: xDeg
 """
 
 from multiprocessing import Process, Queue
@@ -35,7 +35,7 @@ from AgentUtil.DSO import DSO
 from AgentUtil.Util import gethostname
 import socket
 
-__author__ = 'javier'
+__author__ = 'xDeg'
 
 # Definimos los parametros de la linea de comandos
 parser = argparse.ArgumentParser()

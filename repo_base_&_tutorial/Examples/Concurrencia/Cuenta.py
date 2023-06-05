@@ -6,13 +6,13 @@ Dos procesos contando numeros
 
 Created on 12/02/2014
 
-@author: javier
+@author: xDeg
 
 """
 
 from multiprocessing import Process
 
-__author__ = 'javier'
+__author__ = 'xDeg'
 
 
 def cuenta(li, ls):

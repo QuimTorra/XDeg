@@ -12,7 +12,7 @@ tienen definidos
 @author: bejar
 
 """
-__author__ = 'javier'
+__author__ = 'xDeg'
 
 from SPARQLWrapper import SPARQLWrapper, JSON, XML, RDF, N3
 from rdflib import Graph, BNode, Literal

@@ -6,7 +6,7 @@ Antes de ejecutar hay que añadir la raiz del proyecto a la variable PYTHONPATH
 
 Agente que se registra como agente de Gestor de Transporte y espera peticiones
 
-@author: javier
+@author: xDeg
 """
 
 from multiprocessing import Process, Queue
@@ -30,7 +30,7 @@ import socket
 from AgentUtil.OntoNamespaces import ECSDI
 
 
-__author__ = 'javier'
+__author__ = 'xDeg'
 
 # Definimos los parametros de la linea de comandos
 parser = argparse.ArgumentParser()

@@ -8,7 +8,7 @@ Webservice flask con tres entradas
  /pag - pagina web que enseña una pagina con numeros de 0 al 9
  /agente - Responde con un mensaje diferente si se recibe un GET o un POST
 
-@author: javier
+@author: xDeg
 """
 
 from multiprocessing import Process

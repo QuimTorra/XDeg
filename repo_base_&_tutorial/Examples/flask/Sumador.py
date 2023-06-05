@@ -12,7 +12,7 @@ Se puede invocar al servicio desde un navegador
 
 http://127.0.0.1:5000/sumador?x=3&y=4
 
-@author: javier
+@author: xDeg
 """
 
 from flask import Flask, request

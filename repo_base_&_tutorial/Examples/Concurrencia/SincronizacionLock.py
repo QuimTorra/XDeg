@@ -6,13 +6,13 @@ Escritura exclusiva en un recurso compartido
 
 Created on 12/02/2015
 
-@author: javier
+@author: xDeg
 """
 
 from multiprocessing import Process, Array, Lock
 from ctypes import c_int
 
-__author__ = 'javier'
+__author__ = 'xDeg'
 
 
 def proceso1(a, l):

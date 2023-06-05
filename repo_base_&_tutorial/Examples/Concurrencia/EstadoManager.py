@@ -6,12 +6,12 @@ Procesos que comparten datos con el Namespace de un manager
 
 Created on 12/02/2014
 
-@author: javier
+@author: xDeg
 """
 
 from multiprocessing import Process, Manager, Lock
 
-__author__ = 'javier'
+__author__ = 'xDeg'
 
 
 def proceso1(nsp, l):

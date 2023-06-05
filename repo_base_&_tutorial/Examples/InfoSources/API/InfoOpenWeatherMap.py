@@ -6,10 +6,10 @@ Demo de consulta del servicio del tiempo de openweathermap.org
 
 Para hacer consultas hay que registrarse y obtener una clave de desarrollador
 
-@author: javier
+@author: xDeg
 """
 
-__author__ = 'javier'
+__author__ = 'xDeg'
 
 import requests
 from AgentUtil.APIKeys import WEATHERAPPID

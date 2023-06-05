@@ -7,12 +7,12 @@ Dos procesos que se comunican entre si a traves de una tuberia
 
 Created on 12/02/2014
 
-@author: javier
+@author: xDeg
 """
 
 from multiprocessing import Process, Pipe
 
-__author__ = 'javier'
+__author__ = 'xDeg'
 
 def proceso1(conn1, conn2):
     for i in range(100):

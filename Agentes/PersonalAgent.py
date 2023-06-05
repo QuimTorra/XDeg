@@ -9,7 +9,7 @@ Ejemplo de agente que busca en el directorio y llama al agente obtenido
 
 Created on 09/02/2014
 
-@author: javier
+@author: xDeg
 """
 
 from multiprocessing import Process
@@ -33,7 +33,7 @@ import socket
 from AgentUtil.ACLMessages import get_message_properties
 from AOrganizador import AgenteOrganizador
 
-__author__ = 'javier'
+__author__ = 'xDeg'
 
 # Definimos los parametros de la linea de comandos
 parser = argparse.ArgumentParser()

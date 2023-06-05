@@ -6,9 +6,9 @@ Utilidades para tratar los mensajes FIPA ACL
 
 Created on 08/02/2014
 
-@author: javier
+@author: xDeg
 """
-__author__ = 'javier'
+__author__ = 'xDeg'
 
 from rdflib import Graph, URIRef
 import requests

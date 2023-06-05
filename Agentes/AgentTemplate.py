@@ -11,7 +11,7 @@ Tiene una funcion AgentBehavior1 que se lanza como un thread concurrente
 
 Asume que el agente de registro esta en el puerto 9000
 
-@author: javier
+@author: xDeg
 """
 
 from multiprocessing import Process, Queue
@@ -23,7 +23,7 @@ from flask import Flask
 from AgentUtil.FlaskServer import shutdown_server
 from AgentUtil.Agent import Agent
 
-__author__ = 'javier'
+__author__ = 'xDeg'
 
 # Configuration stuff
 hostname = socket.gethostname()
