@@ -17,7 +17,7 @@ import logging
 import argparse
 
 from flask import Flask, render_template, request
-from rdflib import Graph, Literal, Namespace, XSD
+from rdflib import Graph, Literal, Namespace, XSD, URIRef
 from rdflib.namespace import FOAF, RDF
 
 from AgentUtil.ACL import ACL
@@ -184,6 +184,7 @@ def browser_iface():
         mess = request.form['message']
         return render_template('riface.html', user=user, mess=mess)
 
+
 @app.route("/plan", methods=['GET', 'POST'])
 def hacer_plan():
     if request.method == 'GET':
@@ -194,16 +195,26 @@ def hacer_plan():
         content = gr.value(subject=msg, predicate=ACL.content)
         ragn_addr = gr.value(subject=content, predicate=DSO.Address)
         
+        #GET INFO FORM
+        destination = request.form['tp_destination']
+        date_Ini = request.form['dateIni']
+        date_Fi = request.form['dateEnd'] 
+        presupost = request.form['presupost']
+        pref_trans =  []
+        if 'tp_bus' in request.form: pref_trans.append('bus')
+        if 'tp_plane' in request.form: pref_trans.append('plane')
+        if 'tp_train' in request.form: pref_trans.append('train')
+        if 'tp_ferry' in request.form: pref_trans.append('ferry')
+
         #Peticion Viaje
         gr = Graph()
         contentResult = ECSDI['Pedir_plan_viaje_'+ str(get_count())]
         gr.add((contentResult, RDF.type, ECSDI.Pedir_plan_viaje))
-        gr.add((contentResult, ECSDI.Destino, Literal("destino", datatype=XSD.string)))
-        gr.add((contentResult, ECSDI.Data_Ini, Literal("2023/03/02", datatype=XSD.string)))
-        gr.add((contentResult, ECSDI.Data_Fi, Literal("2023/03/09", datatype=XSD.string)))
-        gr.add((contentResult, ECSDI.Presupuesto, Literal("200", datatype=XSD.string)))
-
-
+        gr.add((contentResult, ECSDI.Destino, Literal(destination, datatype=XSD.string)))
+        gr.add((contentResult, ECSDI.Data_Ini, Literal(date_Ini, datatype=XSD.date)))
+        gr.add((contentResult, ECSDI.Data_Fi, Literal(date_Fi, datatype=XSD.date)))
+        gr.add((contentResult, ECSDI.Presupuesto, Literal(presupost, datatype=XSD.integer)))
+        gr.add((contentResult, ECSDI.Preferencias_Medio_Transporte, Literal(str(pref_trans), datatype=XSD.string)))
 
         deg = build_message(gr,
                                ACL['request'],
