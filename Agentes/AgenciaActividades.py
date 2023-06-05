@@ -138,15 +138,18 @@ def getActividades():
     data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
     data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
     presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
-    tipo_actividades = gm.value(subject=content, predicate=ECSDI.Tipo_Actividades)
-    pref_Transportes = eval(gm.value(subject=content, predicate=ECSDI.Preferencias_Medio_Transporte))
+    actividades = gm.value(subject=content, predicate=ECSDI.actividades)
 
-    if len(tipo_actividades) != 0 : 
-      res = tipo_actividades[random.randint(0, len(tipo_actividades)-1)]
-      gr = build_message(Graph(),
+    if (True): 
+    #   res = tipo_actividades[random.randint(0, len(tipo_actividades)-1)]
+      res = Graph()
+      ac_content = ECSDI['Pedir_plan_viaje']
+      a = "degactividades"
+      res.add((ac_content, ECSDI.actividades, Literal(a)))
+      gr = build_message(res,
                         ACL['inform'],
                         sender=AgenciaActividades.uri,
-                        content=Literal(res)).serialize(format='xml')
+                        content=ac_content).serialize(format='xml')
     else:  
       gr = build_message(Graph(),
                           ACL['inform'],

@@ -235,10 +235,12 @@ def hacer_plan():
         aloj_estrellas = rr.value(subject=res_content, predicate=ECSDI.aloj_estrellas)
         print(alojamiento, aloj_precio, aloj_estrellas)
         aloj_view = alojamiento + ' (' + ('⭐'*int(aloj_estrellas)) + ')' + " : " + aloj_precio + '€'
+        actividades = rr.value(subject=res_content, predicate=ECSDI.actividades)
     
 
         #Plan result
-        return render_template('rplan.html', transport=transport, alojamiento=aloj_view)
+        return render_template('rplan.html', transport=transport, alojamiento=aloj_view, actividades=actividades)
+
 
 
 @app.route("/stop")

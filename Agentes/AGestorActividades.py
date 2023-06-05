@@ -227,8 +227,7 @@ def comunicacion():
                 data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
                 data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
                 presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
-                tipo_actividades = gm.value(subject=content, predicate=ECSDI.Tipo_Actividades)
-                pref_Transportes = eval(gm.value(subject=content, predicate=ECSDI.Preferencias_Medio_Transporte))
+
 
                 address = 'http://%s:%d/actividades' % (ahostname, aport)
                 gg = Graph()
@@ -238,8 +237,6 @@ def comunicacion():
                 gg.add((tp_content, ECSDI.Data_Ini, Literal(data_ini)))
                 gg.add((tp_content, ECSDI.Data_Fi, Literal(data_fi)))
                 gg.add((tp_content, ECSDI.Presupuesto, Literal(presupuesto)))
-                gg.add((tp_content, ECSDI.Tipo_Actividades, Literal(tipo_actividades)))
-                gg.add((tp_content, ECSDI.Preferencias_Medio_Transporte, Literal(pref_Transportes)))
                 deg = build_message(gg,
                                   ACL.request,
                                   sender=GestorActividades.uri,
@@ -247,13 +244,12 @@ def comunicacion():
                                   content=tp_content)
                 r = send_message(deg, address)
                 rm = get_message_properties(r)
-                transport = rm['content']
+                content = rm['content']
 
-                gr = Graph()
-                gr = build_message(Graph(),
+                gr = build_message(r,
                         ACL['inform'],
                         sender=GestorActividades.uri,
-                        content=transport).serialize(format='xml')
+                        content=content).serialize(format='xml')
             else:
                 gr = build_message(Graph(),
                         ACL['inform'],
@@ -261,7 +257,6 @@ def comunicacion():
                         content=Literal("NO ENTIENDO")).serialize(format='xml')
 
     mss_cnt += 1
-
 
     logger.info('Respondemos a la peticion')
 
