@@ -69,8 +69,8 @@ app = Flask(__name__)
 
 agn = Namespace("http://www.agentes.org#")
 
-ExTransporte = Agent('ExTransporte',
-                    agn.ExTransporte,
+AgenciaTransporte = Agent('AgenciaTransporte',
+                    agn.AgenciaTransporte,
                     'http://%s:%d/comm' % (hostaddr, port),
                     'http://%s:%d/Stop' % (hostaddr, port))
 
@@ -96,17 +96,17 @@ def register_message():
     # Construimos el mensaje de registro
     gmess.bind('foaf', FOAF)
     gmess.bind('dso', DSO)
-    reg_obj = agn[ExTransporte.name + '-Register']
+    reg_obj = agn[AgenciaTransporte.name + '-Register']
     gmess.add((reg_obj, RDF.type, DSO.Register))
-    gmess.add((reg_obj, DSO.Uri, ExTransporte.uri))
-    gmess.add((reg_obj, FOAF.name, Literal(ExTransporte.name)))
-    gmess.add((reg_obj, DSO.Address, Literal(ExTransporte.address)))
-    gmess.add((reg_obj, DSO.AgentType, DSO.ExTransporte))
+    gmess.add((reg_obj, DSO.Uri, AgenciaTransporte.uri))
+    gmess.add((reg_obj, FOAF.name, Literal(AgenciaTransporte.name)))
+    gmess.add((reg_obj, DSO.Address, Literal(AgenciaTransporte.address)))
+    gmess.add((reg_obj, DSO.AgentType, DSO.AgenciaTransporte))
 
     # Lo metemos en un envoltorio FIPA-ACL y lo enviamos
     gr = send_message(
         build_message(gmess, perf=ACL.request,
-                      sender=ExTransporte.uri,
+                      sender=AgenciaTransporte.uri,
                       receiver=DirectoryAgent.uri,
                       content=reg_obj,
                       msgcnt=mss_cnt),
@@ -154,13 +154,13 @@ def getTransport():
      res = aux_pref_Transportes[random.randint(0, len(aux_pref_Transportes))]
      gr = build_message(Graph(),
                       ACL['inform'],
-                      sender=ExTransporte.uri,
+                      sender=AgenciaTransporte.uri,
                       content=Literal(res)).serialize(format='xml')
      return gr
   
   gr = build_message(Graph(),
                       ACL['inform'],
-                      sender=ExTransporte.uri,
+                      sender=AgenciaTransporte.uri,
                       content=Literal("NO OPTIONS AVAILABLE")).serialize(format='xml')
 
   return gr
