@@ -1,0 +1,117 @@
+@prefix ns1: <http://www.owl-ontologies.com/ECSDI_2023.owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ns1:Actividad_1 a ns1:Actividad ;
+    ns1:Interior "Interior"^^xsd:string ;
+    ns1:Nombre "Visitar Sagrada Familia"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_0 ;
+    ns1:Tipo "Cultural"^^xsd:string .
+
+ns1:Actividad_10 a ns1:Actividad ;
+    ns1:Interior "Exterior"^^xsd:string ;
+    ns1:Nombre "The London Eye"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_2 ;
+    ns1:Tipo "Cultural"^^xsd:string .
+
+ns1:Actividad_11 a ns1:Actividad ;
+    ns1:Interior "Exterior"^^xsd:string ;
+    ns1:Nombre "Visitar Big Ben"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_2 ;
+    ns1:Tipo "Cultural"^^xsd:string .
+
+ns1:Actividad_12 a ns1:Actividad ;
+    ns1:Interior "Interior"^^xsd:string ;
+    ns1:Nombre "Ice Skating"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_2 ;
+    ns1:Tipo "Ludica"^^xsd:string .
+
+ns1:Actividad_13 a ns1:Actividad ;
+    ns1:Interior "Interior"^^xsd:string ;
+    ns1:Nombre "13th Century Dance Hall"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_2 ;
+    ns1:Tipo "Festiva"^^xsd:string .
+
+ns1:Actividad_14 a ns1:Actividad ;
+    ns1:Interior "Exterior"^^xsd:string ;
+    ns1:Nombre "Visitar Coliseo"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_3 ;
+    ns1:Tipo "Cultural"^^xsd:string .
+
+ns1:Actividad_15 a ns1:Actividad ;
+    ns1:Interior "Interior"^^xsd:string ;
+    ns1:Nombre "Visitar Vaticano"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_3 ;
+    ns1:Tipo "Cultural"^^xsd:string .
+
+ns1:Actividad_16 a ns1:Actividad ;
+    ns1:Interior "Exterior"^^xsd:string ;
+    ns1:Nombre "Lucha en el Coliseo"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_3 ;
+    ns1:Tipo "Ludica"^^xsd:string .
+
+ns1:Actividad_17 a ns1:Actividad ;
+    ns1:Interior "Interior"^^xsd:string ;
+    ns1:Nombre "Construye tu propio Coliseo (miniatura) con degref!"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_3 ;
+    ns1:Tipo "Festiva"^^xsd:string .
+
+ns1:Actividad_2 a ns1:Actividad ;
+    ns1:Interior "Interior"^^xsd:string ;
+    ns1:Nombre "Concerts Palau de la Musica"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_0 ;
+    ns1:Tipo "Cultural"^^xsd:string .
+
+ns1:Actividad_3 a ns1:Actividad ;
+    ns1:Interior "Interior"^^xsd:string ;
+    ns1:Nombre "ScapeRoom"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_0 ;
+    ns1:Tipo "Ludica"^^xsd:string .
+
+ns1:Actividad_4 a ns1:Actividad ;
+    ns1:Interior "Exterior"^^xsd:string ;
+    ns1:Nombre "Ball de Festa Major"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_0 ;
+    ns1:Tipo "Festiva"^^xsd:string .
+
+ns1:Actividad_5 a ns1:Actividad ;
+    ns1:Interior "Exterior"^^xsd:string ;
+    ns1:Nombre "Tibidabo"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_0 ;
+    ns1:Tipo "Ludica"^^xsd:string .
+
+ns1:Actividad_6 a ns1:Actividad ;
+    ns1:Interior "Interior"^^xsd:string ;
+    ns1:Nombre "Comer Baggetes y Cuasons"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_1 ;
+    ns1:Tipo "Cultural"^^xsd:string .
+
+ns1:Actividad_7 a ns1:Actividad ;
+    ns1:Interior "Interior"^^xsd:string ;
+    ns1:Nombre "Museo Louvre"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_1 ;
+    ns1:Tipo "Cultural"^^xsd:string .
+
+ns1:Actividad_8 a ns1:Actividad ;
+    ns1:Interior "Exterior"^^xsd:string ;
+    ns1:Nombre "DisneyLand"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_1 ;
+    ns1:Tipo "Ludica"^^xsd:string .
+
+ns1:Actividad_9 a ns1:Actividad ;
+    ns1:Interior "Exterior"^^xsd:string ;
+    ns1:Nombre "Visitar Torre Eiffel"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_1 ;
+    ns1:Tipo "Cultural"^^xsd:string .
+
+ns1:Destino_1 a ns1:Destino ;
+    ns1:Nombre "paris"^^xsd:string .
+
+ns1:Destino_2 a ns1:Destino ;
+    ns1:Nombre "london"^^xsd:string .
+
+ns1:Destino_3 a ns1:Destino ;
+    ns1:Nombre "rome"^^xsd:string .
+
+ns1:Destino_0 a ns1:Destino ;
+    ns1:Nombre "barcelona"^^xsd:string .
+

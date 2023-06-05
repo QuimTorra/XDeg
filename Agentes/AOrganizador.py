@@ -244,6 +244,7 @@ def comunicacion():
         pref_Transportes = eval(gm.value(subject=content, predicate=ECSDI.Preferencias_Medio_Transporte))
         pref_Alojamientos = eval(gm.value(subject=content, predicate=ECSDI.Preferencias_Alojamiento))
         min_estrellas = eval(gm.value(subject=content, predicate=ECSDI.Estrellas))
+        pref_Actividades = eval(gm.value(subject=content, predicate=ECSDI.Preferencias_Actividades))
 
         # Buscamos Transporte
         transport_name, transport_price = pedir_transporte(destino, data_ini, data_fi, pref_Transportes)
@@ -252,29 +253,8 @@ def comunicacion():
         alojam_name, alojam_price, alojam_estrellas = pedir_alojamiento(destino, data_ini, data_fi, pref_Alojamientos, min_estrellas)
 
         # Buscamos Activities.Activity.Activity
-
-        gr_a = find_agent_info(DSO.GestorActividades)
-        msg_a = gr_a.value(predicate=RDF.type, object=ACL.FipaAclMessage)
-        content_a = gr_a.value(subject=msg_a, predicate=ACL.content)
-        activ_addr = gr_a.value(subject=content_a, predicate=DSO.Address)
-
-        activ_g = Graph()
-        ac_content = ECSDI['Pedir_plan_viaje']
-        activ_g.add((ac_content, RDF.type, ECSDI.Pedir_plan_viaje))
-        activ_g.add((ac_content, ECSDI.Destino, Literal(destino)))
-        activ_g.add((ac_content, ECSDI.Data_Ini, Literal(data_ini)))
-        activ_g.add((ac_content, ECSDI.Data_Fi, Literal(data_fi)))
-        activ_g.add((ac_content, ECSDI.Presupuesto, Literal(presupuesto, datatype=XSD.integer)))
-
-        deg_a = build_message(activ_g,
-                            ACL.request,
-                            sender=AgenteOrganizador.uri,
-                            msgcnt=mss_cnt,
-                            content=ac_content)
-        ac_res = send_message(deg_a, activ_addr)
-        ac_m = get_message_properties(ac_res)
-        ac_cont = ac_m['content']
-        actividades = ac_res.value(subject=ac_cont, predicate=ECSDI.actividades)
+        actividades = pedir_actividades(destino, data_ini, data_fi, pref_Actividades)
+        print("++++", actividades)
 
         # Construimos la respuesta
         res_g = Graph()
@@ -364,6 +344,36 @@ def pedir_alojamiento(destino, data_ini, data_fi, pref_Alojamientos, min_estrell
             aloj_stars = aj_res.value(subject=medio_t, predicate=ECSDI.Estrellas).toPython()
             return aloj_name, aloj_price, aloj_stars
     return None, None, None
+
+def pedir_actividades(destino, data_ini, data_fi, pref_act):
+    gr_a = find_agent_info(DSO.GestorActividades)
+    msg_a = gr_a.value(predicate=RDF.type, object=ACL.FipaAclMessage)
+    content_a = gr_a.value(subject=msg_a, predicate=ACL.content)
+    activ_addr = gr_a.value(subject=content_a, predicate=DSO.Address)
+
+    activ_g = Graph()
+    ac_content = ECSDI['Pedir_plan_viaje']
+    activ_g.add((ac_content, RDF.type, ECSDI.Pedir_plan_viaje))
+    activ_g.add((ac_content, ECSDI.Destino, Literal(destino)))
+    activ_g.add((ac_content, ECSDI.Data_Ini, Literal(data_ini)))
+    activ_g.add((ac_content, ECSDI.Data_Fi, Literal(data_fi)))
+    activ_g.add((ac_content, ECSDI.Preferencias_Actividades, Literal(pref_act)))
+
+    deg_a = build_message(activ_g,
+                        ACL.request,
+                        sender=AgenteOrganizador.uri,
+                        msgcnt=mss_cnt,
+                        content=ac_content)
+    ac_res = send_message(deg_a, activ_addr)
+    ac_m = get_message_properties(ac_res)
+    ac_cont = ac_m['content']
+    actividades = []
+    if ac_cont.toPython() == "OPTIONS AVAILABLE":
+        acts = ac_res.value(subject=ac_cont, predicate=ECSDI.Actividades)
+        print("OPTIONS AVAILABLE: ", acts)
+        actividades = acts
+
+    return actividades
 
 def tidyup():
     """

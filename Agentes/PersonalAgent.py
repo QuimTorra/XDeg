@@ -216,6 +216,11 @@ def hacer_plan():
         if 'al_deg' in request.form: pref_aloj.append('deg')
         estrellas = request.form['estrellas']
 
+        pref_act = []
+        if 'ac_cult' in request.form: pref_act.append('Cultural')
+        if 'ac_ludic' in request.form: pref_act.append('Ludica')
+        if 'ac_fest' in request.form: pref_act.append('Festiva')
+
         #Peticion Viaje
         gr = Graph()
         contentResult = ECSDI['Pedir_plan_viaje_'+ str(get_count())]
@@ -228,7 +233,7 @@ def hacer_plan():
         gr.add((contentResult, ECSDI.Preferencias_Medio_Transporte, Literal(str(pref_trans), datatype=XSD.string)))
         gr.add((contentResult, ECSDI.Preferencias_Alojamiento, Literal(str(pref_aloj), datatype=XSD.string)))
         gr.add((contentResult, ECSDI.Estrellas, Literal(estrellas, datatype=XSD.integer)))
-        
+        gr.add((contentResult, ECSDI.Preferencias_Actividades, Literal(str(pref_act), datatype=XSD.string)))
 
         deg = build_message(gr,
                                ACL['request'],

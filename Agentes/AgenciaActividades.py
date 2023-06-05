@@ -6,7 +6,7 @@ from flask import Flask, request, Response
 from flask.json import jsonify
 import json
 import argparse
-from rdflib import FOAF, RDF, Graph, Literal, Namespace
+from rdflib import FOAF, RDF, XSD, Graph, Literal, Namespace
 import requests
 import logging
 from requests import ConnectionError
@@ -76,6 +76,26 @@ AgenciaActividades = Agent('AgenciaActividades',
 
 mss_cnt = 0
 
+ontologyFile = open('../data/Activity_BD.rdf')
+fuente_Datos = Graph()
+fuente_Datos = fuente_Datos.parse(ontologyFile)
+
+#CHECKOUT DATABASE
+print('######')
+for act_c in fuente_Datos.subjects(RDF.type, ECSDI.Actividad):
+    print(fuente_Datos.value(subject=act_c, predicate=ECSDI.Pertenece_a),
+          fuente_Datos.value(subject=fuente_Datos.value(subject=act_c, predicate=ECSDI.Pertenece_a), predicate=ECSDI.Nombre),
+          fuente_Datos.value(subject=act_c, predicate=ECSDI.Tipo),
+          fuente_Datos.value(subject=act_c, predicate=ECSDI.Interior))
+print('######')
+
+def get_count():
+    global mss_cnt
+    if not mss_cnt:
+        mss_cnt = 0
+    mss_cnt += 1
+    return mss_cnt
+
 def register_message():
     """
     Envia un mensaje de registro al servicio de registro
@@ -137,18 +157,36 @@ def getActividades():
     destino = gm.value(subject=content, predicate=ECSDI.Destino)
     data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
     data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
-    presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
-    actividades = gm.value(subject=content, predicate=ECSDI.actividades)
 
-    #   res = tipo_actividades[random.randint(0, len(tipo_actividades)-1)]
-    res = Graph()
-    ac_content = ECSDI['Pedir_plan_viaje']
-    a = "degactividades"
-    res.add((ac_content, ECSDI.actividades, Literal(a)))
-    gr = build_message(res,
+    grespuesta = Graph()
+    contentResult = ECSDI['Cerca_productes_' + str(get_count())]
+    #OBTAIN FROM DATABASE
+    for act_c in fuente_Datos.subjects(RDF.type, ECSDI.Actividad):
+        id_destino = fuente_Datos.value(subject=act_c, predicate=ECSDI.Pertenece_a)
+
+        #Metodo transporte hacia el destiono
+        if fuente_Datos.value(subject=id_destino, predicate=ECSDI.Nombre) == destino:
+            act_name = fuente_Datos.value(subject=act_c, predicate=ECSDI.Nombre)
+            act_tipo = fuente_Datos.value(subject=act_c, predicate=ECSDI.Tipo)
+            act_interior = fuente_Datos.value(subject=act_c, predicate=ECSDI.Interior)
+
+            actividad = ECSDI['Actividad_'+ str(get_count())]
+            grespuesta.add((actividad, RDF.type, ECSDI.Actividad))
+            grespuesta.add((actividad, ECSDI.Nombre, Literal(act_name, datatype=XSD.string)))
+            grespuesta.add((actividad, ECSDI.Tipo, Literal(act_tipo, datatype=XSD.string)))
+            grespuesta.add((actividad, ECSDI.Interior, Literal(act_interior, datatype=XSD.string)))
+    
+    print("#### RESULTADO QUERY ####")
+    for act_c in grespuesta.subjects(RDF.type, ECSDI.Actividad):
+        print(destino,
+            grespuesta.value(subject=act_c, predicate=ECSDI.Nombre),
+            grespuesta.value(subject=act_c, predicate=ECSDI.Tipo),
+            grespuesta.value(subject=act_c, predicate=ECSDI.Interior))
+
+    gr = build_message(grespuesta,
                     ACL['inform'],
                     sender=AgenciaActividades.uri,
-                    content=ac_content).serialize(format='xml')
+                    content=Literal('OPTIONS AVAILABLE')).serialize(format='xml')
   else:  
     gr = build_message(Graph(),
                         ACL['inform'],

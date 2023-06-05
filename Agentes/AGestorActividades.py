@@ -14,7 +14,7 @@ import logging
 import argparse
 
 from flask import Flask, request
-from rdflib import Graph, Namespace, Literal
+from rdflib import XSD, Graph, Namespace, Literal
 from rdflib.namespace import FOAF, RDF
 import requests
 
@@ -115,6 +115,12 @@ dsgraph = Graph()
 # Cola de comunicacion entre procesos
 cola1 = Queue()
 
+def get_count():
+    global mss_cnt
+    if not mss_cnt:
+        mss_cnt = 0
+    mss_cnt += 1
+    return mss_cnt
 
 def register_message():
     """
@@ -226,7 +232,7 @@ def comunicacion():
                 destino = gm.value(subject=content, predicate=ECSDI.Destino)
                 data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
                 data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
-                presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
+                pref_act = gm.value(subject=content, predicate=ECSDI.Preferencias_Actividades)
 
 
                 address = 'http://%s:%d/actividades' % (ahostname, aport)
@@ -236,7 +242,6 @@ def comunicacion():
                 gg.add((tp_content, ECSDI.Destino, Literal(destino)))
                 gg.add((tp_content, ECSDI.Data_Ini, Literal(data_ini)))
                 gg.add((tp_content, ECSDI.Data_Fi, Literal(data_fi)))
-                gg.add((tp_content, ECSDI.Presupuesto, Literal(presupuesto)))
                 deg = build_message(gg,
                                   ACL.request,
                                   sender=GestorActividades.uri,
@@ -246,10 +251,35 @@ def comunicacion():
                 rm = get_message_properties(r)
                 content = rm['content']
 
-                gr = build_message(r,
+                if content.toPython() == "OPTIONS AVAILABLE":
+                   # Filtramos las opciones que no nos sirven 
+                    grespuesta = Graph()
+                    for act in r.subjects(RDF.type, ECSDI.Actividad):
+                        if r.value(subject=act, predicate=ECSDI.Tipo).toPython() in pref_act:
+                            nombre = r.value(subject=act, predicate=ECSDI.Nombre)
+                            tipo = r.value(subject=act, predicate=ECSDI.Tipo)
+                            interior = r.value(subject=act, predicate=ECSDI.Interior)
+                            actividad = ECSDI['Actividad_'+ str(get_count())]
+                            grespuesta.add((actividad, RDF.type, ECSDI.Actividad))
+                            grespuesta.add((actividad, ECSDI.Nombre, Literal(nombre, datatype=XSD.string)))
+                            grespuesta.add((actividad, ECSDI.Tipo, Literal(tipo, datatype=XSD.string)))
+                            grespuesta.add((actividad, ECSDI.Interior, Literal(interior, datatype=XSD.string)))
+                    
+                    for act in grespuesta.subjects(RDF.type, ECSDI.Actividad):
+                        print("una que ha entrat:", r.value(subject=act, predicate=ECSDI.Nombre),
+                              r.value(subject=act, predicate=ECSDI.Tipo),
+                              r.value(subject=act, predicate=ECSDI.Interior))
+                    
+                    gr = Graph()
+                    gr = build_message(grespuesta,
+                            ACL['inform'],
+                            sender=GestorActividades.uri,
+                            content=content).serialize(format='xml')
+                else:
+                    gr = build_message(Graph(),
                         ACL['inform'],
                         sender=GestorActividades.uri,
-                        content=content).serialize(format='xml')
+                        content=Literal("NO OPTIONS AVAILABLE")).serialize(format='xml')
             else:
                 gr = build_message(Graph(),
                         ACL['inform'],
