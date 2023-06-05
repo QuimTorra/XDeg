@@ -14,7 +14,7 @@ import logging
 import argparse
 
 from flask import Flask, request
-from rdflib import Graph, Namespace, Literal
+from rdflib import XSD, Graph, Namespace, Literal
 from rdflib.namespace import FOAF, RDF
 import requests
 
@@ -281,7 +281,7 @@ def comunicacion():
         aloj_g.add((aj_content, ECSDI.Gente, Literal(gente)))
         aloj_g.add((aj_content, ECSDI.Data_Ini, Literal(data_ini)))
         aloj_g.add((aj_content, ECSDI.Data_Fi, Literal(data_fi)))
-        aloj_g.add((aj_content, ECSDI.Presupuesto, Literal(presupuesto)))
+        aloj_g.add((aj_content, ECSDI.Presupuesto, Literal(presupuesto, datatype=XSD.integer)))
 
         deg_a = build_message(aloj_g,
                             ACL.request,
@@ -290,18 +290,21 @@ def comunicacion():
                             content=aj_content)
         aj_res = send_message(deg_a, aloj_addr)
         aj_m = get_message_properties(aj_res)
-        alojamiento = aj_m['content']
-        logger.info("Alojamiento: %s", alojamiento)
-
+        aj_cont = aj_m['content']
+        alojamiento = aj_res.value(subject=aj_cont, predicate=ECSDI.alojamiento)
+        aloj_precio = aj_res.value(subject=aj_cont, predicate=ECSDI.precio_aloj)
+        aloj_estrellas = aj_res.value(subject=aj_cont, predicate=ECSDI.estrellas_aloj)
 
         # Buscamos Activities.Activity.Activity
 
-        # Construim0os la respuesta
+        # Construimos la respuesta
         res_g = Graph()
         res_content = ECSDI['Pedir_plan_viaje']
         res_g.add((res_content, RDF.type, ECSDI.Pedir_plan_viaje))
         res_g.add((res_content, ECSDI.transport, transport))
         res_g.add((res_content, ECSDI.alojamiento, alojamiento))
+        res_g.add((res_content, ECSDI.aloj_precio, aloj_precio))
+        res_g.add((res_content, ECSDI.aloj_estrellas, aloj_estrellas))
         gr = build_message(res_g,
                             ACL['inform'],
                             sender=AgenteOrganizador.uri,

@@ -6,7 +6,7 @@ from flask import Flask, request, Response
 from flask.json import jsonify
 import json
 import argparse
-from rdflib import FOAF, RDF, Graph, Literal, Namespace
+from rdflib import FOAF, RDF, XSD, Graph, Literal, Namespace
 import requests
 import logging
 from requests import ConnectionError
@@ -140,11 +140,19 @@ def getAlojamiento():
     data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
     presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
 
-    # res = pref_Transportes[random.randint(0, len(pref_Transportes)-1)]
-    # gr = build_message(Graph(),
-    #                 ACL['inform'],
-    #                 sender=AgenciaAlojamiento.uri,
-    #                 content=Literal(res)).serialize(format='xml')
+    estrelles = random.randint(1,5)
+    preu = random.randint(30, 400)
+    allotjament = (["hotel", "apartamento", "casa rural", "camping", "casa de tu madre", "bajo un puente", "deg"])[random.randint(0,6)]
+
+    g = Graph()
+    content = ECSDI['Pedir_plan_viaje']
+    g.add((content, ECSDI.alojamiento, Literal(allotjament)))
+    g.add((content, ECSDI.precio_aloj, Literal(preu, datatype=XSD.integer)))
+    g.add((content, ECSDI.estrellas_aloj, Literal(estrelles, datatype=XSD.integer)))
+    gr = build_message(g,
+                    ACL['inform'],
+                    sender=AgenciaAlojamiento.uri,
+                    content=content).serialize(format='xml')
 
   else:  
     gr = build_message(Graph(),

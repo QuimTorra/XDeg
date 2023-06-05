@@ -14,7 +14,7 @@ import logging
 import argparse
 
 from flask import Flask, request
-from rdflib import Graph, Namespace, Literal
+from rdflib import XSD, Graph, Namespace, Literal
 from rdflib.namespace import FOAF, RDF
 import requests
 
@@ -76,7 +76,7 @@ else:
     dhostname = args.dhost
 
 if args.aport is None:
-    aport = 9050
+    aport = 9051
 else:
     aport = args.aport
 
@@ -237,7 +237,7 @@ def comunicacion():
                 gg.add((tp_content, ECSDI.Gente, Literal(gente)))
                 gg.add((tp_content, ECSDI.Data_Ini, Literal(data_ini)))
                 gg.add((tp_content, ECSDI.Data_Fi, Literal(data_fi)))
-                gg.add((tp_content, ECSDI.Presupuesto, Literal(presupuesto)))
+                gg.add((tp_content, ECSDI.Presupuesto, Literal(presupuesto, datatype=XSD.integer)))
                 deg = build_message(gg,
                                   ACL.request,
                                   sender=GestorAlojamiento.uri,
@@ -245,13 +245,12 @@ def comunicacion():
                                   content=tp_content)
                 r = send_message(deg, address)
                 rm = get_message_properties(r)
-                alojamiento = rm['content']
+                content = rm['content']
 
-                gr = Graph()
-                gr = build_message(Graph(),
+                gr = build_message(r,
                         ACL['inform'],
                         sender=GestorAlojamiento.uri,
-                        content=alojamiento).serialize(format='xml')
+                        content=content).serialize(format='xml')
             else:
                 gr = build_message(Graph(),
                         ACL['inform'],
