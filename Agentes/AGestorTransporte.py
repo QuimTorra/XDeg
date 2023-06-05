@@ -27,6 +27,8 @@ from AgentUtil.DSO import DSO
 from AgentUtil.Util import gethostname
 import socket
 
+from AgentUtil.OntoNamespaces import ECSDI
+
 
 __author__ = 'javier'
 
@@ -219,32 +221,49 @@ def comunicacion():
                 content = msgdic['content']
                 accion = gm.value(subject=content, predicate=RDF.type)
 
-            address = 'http://%s:%d/' % (ahostname, aport)
-            deg = build_message(gm,
-                                ACL.request,
-                                sender=GestorTransporte.uri,
-                                msgcnt=mss_cnt,
-                                content=content).serialize(format='xml')
-            r = requests.get(address + 'transport', params={'content': deg})
-            g_res = Graph()
-            g_res.parse(data=r._content, format='xml')
-            g_res_cont = get_message_properties(g_res)
-            transport = g_res_cont['content'] # form
+            accion = gm.value(subject=content, predicate=RDF.type)
+            if accion == ECSDI.Pedir_plan_viaje:        
+                destino = gm.value(subject=content, predicate=ECSDI.Destino)
+                data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
+                data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
+                presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
+                pref_Transportes = eval(gm.value(subject=content, predicate=ECSDI.Preferencias_Medio_Transporte))
 
-            # Aqui realizariamos lo que pide la accion
-            # Por ahora simplemente retornamos un Inform-done
-            gr = build_message(Graph(),
-                               ACL['inform'],
-                               sender=GestorTransporte.uri,
-                               msgcnt=mss_cnt,
-                               receiver=msgdic['sender'],
-                               content=transport)
+                address = 'http://%s:%d/transport' % (ahostname, aport)
+                gg = Graph()
+                tp_content = ECSDI['Pedir_plan_viaje']
+                gg.add((tp_content, RDF.type, ECSDI.Pedir_plan_viaje))
+                gg.add((tp_content, ECSDI.Destino, Literal(destino)))
+                gg.add((tp_content, ECSDI.Data_Ini, Literal(data_ini)))
+                gg.add((tp_content, ECSDI.Data_Fi, Literal(data_fi)))
+                gg.add((tp_content, ECSDI.Presupuesto, Literal(presupuesto)))
+                gg.add((tp_content, ECSDI.Preferencias_Medio_Transporte, Literal(pref_Transportes)))
+                deg = build_message(gg,
+                                  ACL.request,
+                                  sender=GestorTransporte.uri,
+                                  msgcnt=mss_cnt,
+                                  content=tp_content)
+                r = send_message(deg, address)
+                rm = get_message_properties(r)
+                transport = rm['content']
+
+                gr = Graph()
+                gr = build_message(Graph(),
+                        ACL['inform'],
+                        sender=GestorTransporte.uri,
+                        content=transport).serialize(format='xml')
+            else:
+                gr = build_message(Graph(),
+                        ACL['inform'],
+                        sender=GestorTransporte.uri,
+                        content=Literal("NO ENTIENDO")).serialize(format='xml')
+
     mss_cnt += 1
 
 
     logger.info('Respondemos a la peticion')
 
-    return gr.serialize(format='xml')
+    return gr
 
 
 

@@ -115,8 +115,6 @@ def register_message():
 
     return gr
 
-available = ["bus", "plane", "train", "ferry"]
-
 @app.route("/")
 def isAlive():
   text = 'Hi i\'m AExtTransporte o/, if you wanna travel go to <a href= /transport?coses=deg>here</a>'
@@ -135,34 +133,31 @@ def getTransport():
 
   #accion (La peticion es valida)
   accion = gm.value(subject=content, predicate=RDF.type)
-  if accion == ECSDI.Pedir_plan_viaje or accion != ECSDI.Pedir_plan_viaje:        
+  if accion == ECSDI.Pedir_plan_viaje:        
     destino = gm.value(subject=content, predicate=ECSDI.Destino)
     data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
     data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
     presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
-    aux_pref_Transportes = eval(gm.value(subject=content, predicate=ECSDI.Preferencias_Medio_Transporte)) #Array of options, might be equal to []
+    pref_Transportes = eval(gm.value(subject=content, predicate=ECSDI.Preferencias_Medio_Transporte))
 
-    print ("DEST", destino)
-    print ("DATA_INI", data_ini)
-    print ("DATA_FI", data_fi)
-    print ("PRESUPOST", presupuesto)
-    print ("PREF_TRANS", aux_pref_Transportes)
+    if len(pref_Transportes) != 0 : 
+      res = pref_Transportes[random.randint(0, len(pref_Transportes)-1)]
+      gr = build_message(Graph(),
+                        ACL['inform'],
+                        sender=AgenciaTransporte.uri,
+                        content=Literal(res)).serialize(format='xml')
+    else:  
+      gr = build_message(Graph(),
+                          ACL['inform'],
+                          sender=AgenciaTransporte.uri,
+                          content=Literal("NO OPTIONS AVAILABLE")).serialize(format='xml')
+  else:  
+    gr = build_message(Graph(),
+                        ACL['inform'],
+                        sender=AgenciaTransporte.uri,
+                        content=Literal("NO OPTIONS AVAILABLE")).serialize(format='xml')
 
-    #IMPLEMENT LOGIC & SELECT ONE
-
-  if len(aux_pref_Transportes) != 0 : 
-     res = aux_pref_Transportes[random.randint(0, len(aux_pref_Transportes))]
-     gr = build_message(Graph(),
-                      ACL['inform'],
-                      sender=AgenciaTransporte.uri,
-                      content=Literal(res)).serialize(format='xml')
-     return gr
-  
-  gr = build_message(Graph(),
-                      ACL['inform'],
-                      sender=AgenciaTransporte.uri,
-                      content=Literal("NO OPTIONS AVAILABLE")).serialize(format='xml')
-
+  print("Send location")
   return gr
 
 if __name__ == "__main__":

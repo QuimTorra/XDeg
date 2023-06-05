@@ -27,6 +27,8 @@ from AgentUtil.DSO import DSO
 from AgentUtil.Util import gethostname
 import socket
 
+from AgentUtil.OntoNamespaces import ECSDI
+
 
 __author__ = 'javier'
 
@@ -113,6 +115,38 @@ dsgraph = Graph()
 # Cola de comunicacion entre procesos
 cola1 = Queue()
 
+def find_agent_info(type):
+    """
+    Busca en el servicio de registro mandando un
+    mensaje de request con una accion Seach del servicio de directorio
+
+    Podria ser mas adecuado mandar un query-ref y una descripcion de registo
+    con variables
+
+    :param type:
+    :return:
+    """
+    global mss_cnt
+    logger.info('Buscamos en el servicio de registro')
+
+    gmess = Graph()
+
+    gmess.bind('foaf', FOAF)
+    gmess.bind('dso', DSO)
+    reg_obj = agn[AgenteOrganizador.name + '-search']
+    gmess.add((reg_obj, RDF.type, DSO.Search))
+    gmess.add((reg_obj, DSO.AgentType, type))
+
+    msg = build_message(gmess, perf=ACL.request,
+                        sender=AgenteOrganizador.uri,
+                        receiver=DirectoryAgent.uri,
+                        content=reg_obj,
+                        msgcnt=mss_cnt)
+    gr = send_message(msg, DirectoryAgent.address)
+    mss_cnt += 1
+    logger.info('Recibimos informacion del agente')
+
+    return gr
 
 def register_message():
     """
@@ -198,17 +232,57 @@ def comunicacion():
     gm.parse(data=message, format='xml')
 
     msgdic = get_message_properties(gm)
-    req_content = msgdic['content']
+    content = msgdic['content']
 
-    print(req_content)
+    accion = gm.value(subject=content, predicate=RDF.type)
+    if accion == ECSDI.Pedir_plan_viaje:        
+        destino = gm.value(subject=content, predicate=ECSDI.Destino)
+        data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
+        data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
+        presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
+        pref_Transportes = eval(gm.value(subject=content, predicate=ECSDI.Preferencias_Medio_Transporte))
+
+        # Buscamos Transporte
+        gr = find_agent_info(DSO.GestorTransporte)
+        msg = gr.value(predicate=RDF.type, object=ACL.FipaAclMessage)
+        content = gr.value(subject=msg, predicate=ACL.content)
+        trans_addr = gr.value(subject=content, predicate=DSO.Address)
+
+        trans_g = Graph()
+        tp_content = ECSDI['Pedir_plan_viaje']
+        trans_g.add((tp_content, RDF.type, ECSDI.Pedir_plan_viaje))
+        trans_g.add((tp_content, ECSDI.Destino, Literal(destino)))
+        trans_g.add((tp_content, ECSDI.Data_Ini, Literal(data_ini)))
+        trans_g.add((tp_content, ECSDI.Data_Fi, Literal(data_fi)))
+        trans_g.add((tp_content, ECSDI.Presupuesto, Literal(presupuesto)))
+        trans_g.add((tp_content, ECSDI.Preferencias_Medio_Transporte, Literal(pref_Transportes)))
+
+        deg = build_message(trans_g,
+                            ACL.request,
+                            sender=AgenteOrganizador.uri,
+                            msgcnt=mss_cnt,
+                            content=tp_content)
+        tp_res = send_message(deg, trans_addr)
+        tp_m = get_message_properties(tp_res)
+        transport = tp_m['content']
+        logger.info("Transport: %s", transport)
+
+        # Buscamos Alojamiento
+        # Buscamos Activities.Activity.Activity
+
+        # Construim0os la respuesta
+        res_g = Graph()
+        res_content = ECSDI['Pedir_plan_viaje']
+        res_g.add((res_content, RDF.type, ECSDI.Pedir_plan_viaje))
+        res_g.add((res_content, ECSDI.transport, transport))
+        gr = build_message(res_g,
+                            ACL['inform'],
+                            sender=AgenteOrganizador.uri,
+                            msgcnt=mss_cnt,
+                            receiver=msgdic['sender'],
+                            content=res_content)
 
     mss_cnt += 1
-    gr = build_message(Graph(),
-                        ACL['inform'],
-                        sender=AgenteOrganizador.uri,
-                        msgcnt=mss_cnt,
-                        receiver=msgdic['sender'],
-                        content=Literal("Return from Organizador"))
 
 
     logger.info('Respondemos a la peticion')

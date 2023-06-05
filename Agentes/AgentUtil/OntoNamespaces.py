@@ -33,4 +33,4 @@ DBP = Namespace('http://dbpedia.org/ontology/')
 GEO = Namespace('http://www.w3.org/2003/01/geo/wgs84_pos#')
 
 # Own namespace
-ECSDI = Namespace("http://www.owl-ontologies.com/ECSDI_XDeg.owl#")
+ECSDI = Namespace("http://www.owl-ontologies.com/ECSDI_2023.owl#")
