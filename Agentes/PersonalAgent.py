@@ -207,8 +207,14 @@ def hacer_plan():
         if 'tp_plane' in request.form: pref_trans.append('plane')
         if 'tp_train' in request.form: pref_trans.append('train')
         if 'tp_ferry' in request.form: pref_trans.append('ferry')
-        pref_aloj = ['hotel', 'apartamento', 'casa rural', 'camping', 'deg']
-        estrellas = 3
+        
+        pref_aloj = []
+        if 'al_hotel' in request.form: pref_aloj.append('hotel')
+        if 'al_apartamento' in request.form: pref_aloj.append('apartamento')
+        if 'al_casa_rural' in request.form: pref_aloj.append('casa rural')
+        if 'al_camping' in request.form: pref_aloj.append('camping')
+        if 'al_deg' in request.form: pref_aloj.append('deg')
+        estrellas = request.form['estrellas']
 
         #Peticion Viaje
         gr = Graph()
