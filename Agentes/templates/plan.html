@@ -7,50 +7,51 @@
     <title>XDeg</title>
   </head>
   <body>
-    <h2>Generate the best plan for you:</h2>
+    <h2>Genera tu plan ideal:</h2>
     <form action="/plan" method="post">
-      <label> Destination: </label>
+      <label> Destinación: </label>
       <select name="tp_destination" id="tp_destination" size="1" required>
-        <option selected disabled>-- Select Destination --</option>
+        <option selected disabled>-- Escoger destinación --</option>
         <option value="barcelona">Barcelona</option>
-        <option value="paris">Paris</option>
-        <option value="london">London</option>
-        <option value="rome">Rome</option>
+        <option value="paris">París</option>
+        <option value="london">Londres</option>
+        <option value="rome">Roma</option>
       </select>
       <br />
       <br />
 
-      <label> People: </label>
+      <label> Número de personas: </label>
       <select name="tp_people" id="tp_people" size="1">
-        <option selected disabled>-- Select Number of people --</option>
-        <option value="1">1 person</option>
-        <option value="2">2 people</option>
-        <option value="3">3 people</option>
-        <option value="4">4 people</option>
-        <option value="+4">More than 4 people</option>
+        <option selected disabled>-- Selecciona número de personas: --</option>
+        <option value="1">1 persona</option>
+        <option value="2">2 personas</option>
+        <option value="3">3 personas</option>
+        <option value="4">4 personas</option>
+        <option value="+4">Más de 4 personas</option>
       </select>
       <br />
       <br />
 
-      <label for="dateIni">Date Ini: </label>
+      <label for="dateIni">Fecha de inicio: </label>
       <input type="date" name="dateIni" id="dateIni" />
       <br />
-      <label for="dateEnd">Date End: </label>
+      <br />
+      <label for="dateEnd">Fecha de vuelta: </label>
       <input type="date" name="dateEnd" id="dateEnd" required />
       <br />
-      <h4>Choose Transport:</h4>
+      <h4>Escoger transporte:</h4>
       <ul>
         <li>
           <input type="checkbox" name="tp_bus" id="tp_bus" checked />
-          <label for="tp_bus">Bus</label>
+          <label for="tp_bus">Autobús</label>
         </li>
         <li>
           <input type="checkbox" name="tp_plane" id="tp_plane" checked />
-          <label for="tp_plane">Plane</label>
+          <label for="tp_plane">Avión</label>
         </li>
         <li>
           <input type="checkbox" name="tp_train" id="tp_train" checked />
-          <label for="tp_train">Train</label>
+          <label for="tp_train">Tren</label>
         </li>
         <li>
           <input type="checkbox" name="tp_ferry" id="tp_ferry" checked />
@@ -58,7 +59,7 @@
         </li>
       </ul>
 
-      <h4>Choose Accommodation:</h4>
+      <h4>Escoger alojamiento:</h4>
       <ul>
         <li>
           <input type="checkbox" name="al_hotel" id="al_hotel" checked />
@@ -71,7 +72,7 @@
             id="al_apartamento"
             checked
           />
-          <label for="al_apartamento">Apartment</label>
+          <label for="al_apartamento">Apartamento</label>
         </li>
         <li>
           <input
@@ -80,7 +81,7 @@
             id="al_casa_rural"
             checked
           />
-          <label for="al_casa_rural">Cottage</label>
+          <label for="al_casa_rural">Casa rural</label>
         </li>
         <li>
           <input type="checkbox" name="al_camping" id="al_camping" checked />
@@ -88,13 +89,13 @@
         </li>
         <li>
           <input type="checkbox" name="al_deg" id="al_deg" checked />
-          <label for="al_deg">xDeg (luxurious)</label>
+          <label for="al_deg">xDeg (exclusivo)</label>
         </li>
       </ul>
 
-      <label> Mínimum Review Accommodation: </label>
-      <select name="tp_people" id="tp_people" size="1" required>
-        <option selected disabled>-- Select Number of stars --</option>
+      <label> Calificación mínima del alojamiento </label>
+      <select name="estrellas" id="estrellas" size="1" required>
+        <option selected disabled>-- Selecciona número de estrellas: --</option>
         <option value="1">⭐</option>
         <option value="2">⭐⭐</option>
         <option value="3">⭐⭐⭐</option>
@@ -104,12 +105,12 @@
 
       <br />
       <br />
-      <label for="presupost">Budget</label>
+      <label for="presupost">Presupuesto:</label>
       <input type="number" name="presupost" id="presupost" />
       <label for="presupost"> € </label>
       <br />
-
-      <button type="submit">Submit</button>
+      <br />
+      <button type="submit">Buscar</button>
     </form>
   </body>
 </html>
