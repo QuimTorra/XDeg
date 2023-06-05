@@ -253,6 +253,29 @@ def comunicacion():
 
         # Buscamos Activities.Activity.Activity
 
+        gr_a = find_agent_info(DSO.GestorActividades)
+        msg_a = gr_a.value(predicate=RDF.type, object=ACL.FipaAclMessage)
+        content_a = gr_a.value(subject=msg_a, predicate=ACL.content)
+        activ_addr = gr_a.value(subject=content_a, predicate=DSO.Address)
+
+        activ_g = Graph()
+        ac_content = ECSDI['Pedir_plan_viaje']
+        activ_g.add((ac_content, RDF.type, ECSDI.Pedir_plan_viaje))
+        activ_g.add((ac_content, ECSDI.Destino, Literal(destino)))
+        activ_g.add((ac_content, ECSDI.Data_Ini, Literal(data_ini)))
+        activ_g.add((ac_content, ECSDI.Data_Fi, Literal(data_fi)))
+        activ_g.add((ac_content, ECSDI.Presupuesto, Literal(presupuesto, datatype=XSD.integer)))
+
+        deg_a = build_message(activ_g,
+                            ACL.request,
+                            sender=AgenteOrganizador.uri,
+                            msgcnt=mss_cnt,
+                            content=ac_content)
+        ac_res = send_message(deg_a, activ_addr)
+        ac_m = get_message_properties(ac_res)
+        ac_cont = ac_m['content']
+        actividades = ac_res.value(subject=ac_cont, predicate=ECSDI.actividades)
+
         # Construimos la respuesta
         res_g = Graph()
         res_content = ECSDI['Pedir_plan_viaje']
@@ -262,6 +285,7 @@ def comunicacion():
         res_g.add((res_content, ECSDI.alojamiento, Literal(alojam_name)))
         res_g.add((res_content, ECSDI.aloj_precio, Literal(alojam_price)))
         res_g.add((res_content, ECSDI.aloj_estrellas, Literal(alojam_estrellas)))
+        res_g.add((res_content, ECSDI.actividades, Literal(actividades)))
         gr = build_message(res_g,
                             ACL['inform'],
                             sender=AgenteOrganizador.uri,
