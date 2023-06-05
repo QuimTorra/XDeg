@@ -10,7 +10,7 @@
     <h2>Generate the best plan for you:</h2>
     <form action="/plan" method="post">
       <label> Destination: </label>
-      <select name="tp_destination" id="tp_destination" size="1">
+      <select name="tp_destination" id="tp_destination" size="1" required>
         <option selected disabled>-- Select Destination --</option>
         <option value="barcelona">Barcelona</option>
         <option value="paris">Paris</option>
@@ -36,7 +36,7 @@
       <input type="date" name="dateIni" id="dateIni" />
       <br />
       <label for="dateEnd">Date End: </label>
-      <input type="date" name="dateEnd" id="dateEnd" />
+      <input type="date" name="dateEnd" id="dateEnd" required />
       <br />
       <h4>Choose Transport:</h4>
       <ul>
@@ -57,21 +57,53 @@
           <label for="tp_ferry">Ferry</label>
         </li>
       </ul>
-      <h4>Choose Activity Types:</h4>
+
+      <h4>Choose Accommodation:</h4>
       <ul>
         <li>
-          <input type="checkbox" name="ac_cult" id="ac_cult" checked />
-          <label for="ac_cult">Cultural</label>
+          <input type="checkbox" name="al_hotel" id="al_hotel" checked />
+          <label for="al_hotel">Hotel</label>
         </li>
         <li>
-          <input type="checkbox" name="ac_ludic" id="ac_ludic" checked />
-          <label for="ac_ludic">Ludic</label>
+          <input
+            type="checkbox"
+            name="al_apartamento"
+            id="al_apartamento"
+            checked
+          />
+          <label for="al_apartamento">Apartment</label>
         </li>
         <li>
-          <input type="checkbox" name="ac_fest" id="ac_fest" checked />
-          <label for="ac_fest">Festive</label>
+          <input
+            type="checkbox"
+            name="al_casa_rural"
+            id="al_casa_rural"
+            checked
+          />
+          <label for="al_casa_rural">Cottage</label>
+        </li>
+        <li>
+          <input type="checkbox" name="al_camping" id="al_camping" checked />
+          <label for="al_camping">Camping</label>
+        </li>
+        <li>
+          <input type="checkbox" name="al_deg" id="al_deg" checked />
+          <label for="al_deg">xDeg (luxurious)</label>
         </li>
       </ul>
+
+      <label> Mínimum Review Accommodation: </label>
+      <select name="tp_people" id="tp_people" size="1" required>
+        <option selected disabled>-- Select Number of stars --</option>
+        <option value="1">⭐</option>
+        <option value="2">⭐⭐</option>
+        <option value="3">⭐⭐⭐</option>
+        <option value="4">⭐⭐⭐⭐</option>
+        <option value="5">⭐⭐⭐⭐⭐</option>
+      </select>
+
+      <br />
+      <br />
       <label for="presupost">Budget</label>
       <input type="number" name="presupost" id="presupost" />
       <label for="presupost"> € </label>
