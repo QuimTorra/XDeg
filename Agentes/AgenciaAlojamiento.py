@@ -155,7 +155,7 @@ def getAlojamiento():
 
   #accion (La peticion es valida)
   accion = gm.value(subject=content, predicate=RDF.type)
-  if accion == ECSDI.Pedir_plan_viaje:        
+  if accion == ECSDI.Pedir_alojamiento:        
     destino = gm.value(subject=content, predicate=ECSDI.Destino)
     data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
     data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)

@@ -232,7 +232,7 @@ def comunicacion():
                 address = 'http://%s:%d/alojamiento' % (ahostname, aport)
                 gg = Graph()
                 tp_content = ECSDI['Pedir_plan_viaje']
-                gg.add((tp_content, RDF.type, ECSDI.Pedir_plan_viaje))
+                gg.add((tp_content, RDF.type, ECSDI.Pedir_alojamiento))
                 gg.add((tp_content, ECSDI.Destino, Literal(destino)))
                 gg.add((tp_content, ECSDI.Data_Ini, Literal(data_ini)))
                 gg.add((tp_content, ECSDI.Data_Fi, Literal(data_fi)))
