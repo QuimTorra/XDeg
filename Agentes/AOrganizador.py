@@ -9,7 +9,7 @@ Agente que se comunica con otros agentes para organizar un viaje para un determi
 @author: xDeg
 """
 
-from multiprocessing import Process, Queue
+from multiprocessing import Process, Manager, Value, Queue
 import logging
 import argparse
 
@@ -26,6 +26,7 @@ from AgentUtil.Logging import config_logger
 from AgentUtil.DSO import DSO
 from AgentUtil.Util import gethostname
 import socket
+from ctypes import c_char_p
 
 from AgentUtil.OntoNamespaces import ECSDI
 
@@ -186,6 +187,21 @@ def register_message():
 
     return gr
 
+#FUNCTION FOR SUBPROCESS TRANSPORTE
+def run_pedir_transporte(transport_name, transport_price, destino, data_ini, data_fi, pref_Transportes):
+    transport_name.value, transport_price.value = pedir_transporte(destino, data_ini, data_fi, pref_Transportes)
+    #print(transport_name.value, transport_price.value)
+
+#FUNCTION FOR SUBPROCESS ALOJAMIENTO
+def run_pedir_alojamiento(alojam_name, alojam_price, alojam_estrellas, destino, data_ini, data_fi, pref_Alojamientos, min_estrellas):
+    alojam_name.value, alojam_price.value, alojam_estrellas.value = pedir_alojamiento(destino, data_ini, data_fi, pref_Alojamientos, min_estrellas)
+    #print(alojam_name.value, alojam_price.value, alojam_estrellas.value)
+
+#FUNCTION FOR SUBPROCESS ACTIVIDADES
+def run_pedir_actividades(actividades_result, destino, data_ini, data_fi, presupuesto):
+    actividades_result.value = pedir_actividades(destino, data_ini, data_fi, presupuesto)
+    #print(actividades_result.value)
+
 
 @app.route("/iface", methods=['GET', 'POST'])
 def browser_iface():
@@ -262,47 +278,45 @@ def comunicacion():
             mss_cnt += 1
             return gr.serialize(format='xml')
 
-        # Buscamos Transporte
-        transport_name, transport_price = pedir_transporte(destino, data_ini, data_fi, pref_Transportes)
+        # RETURN VARIABLES FOR SUBROCESSING
+        manager = Manager()
+        transport_name = manager.Value(c_char_p, "NONE")
+        transport_price = manager.Value('i', 0) 
+        alojam_name = manager.Value(c_char_p, 'NONE')
+        alojam_price = manager.Value('i', 0)
+        alojam_estrellas = manager.Value('i', 0)
+        actividades_result = manager.Value(c_char_p,'NONE')
 
-        # Buscamos Alojamiento
-        alojam_name, alojam_price, alojam_estrellas = pedir_alojamiento(destino, data_ini, data_fi, pref_Alojamientos, min_estrellas)
+        # Buscamos transporte, Alojamiento i Actividades
+        transport_process = Process(target=run_pedir_transporte, args=(transport_name, transport_price, destino, data_ini, data_fi, pref_Transportes))
+        alojamiento_process = Process(target=run_pedir_alojamiento, args=(alojam_name, alojam_price, alojam_estrellas, destino, data_ini, data_fi, pref_Alojamientos, min_estrellas))
+        actividades_process = Process(target=run_pedir_actividades, args=(actividades_result, destino, data_ini, data_fi, presupuesto))
 
-        # Buscamos Activities.Activity.Activity
+        #Start suprocess
+        transport_process.start()
+        alojamiento_process.start()
+        actividades_process.start()
 
-        gr_a = find_agent_info(DSO.GestorActividades)
-        msg_a = gr_a.value(predicate=RDF.type, object=ACL.FipaAclMessage)
-        content_a = gr_a.value(subject=msg_a, predicate=ACL.content)
-        activ_addr = gr_a.value(subject=content_a, predicate=DSO.Address)
+        # Wait for process to finish
+        transport_process.join()
+        alojamiento_process.join()
+        actividades_process.join()
 
-        activ_g = Graph()
-        ac_content = ECSDI['Pedir_plan_viaje']
-        activ_g.add((ac_content, RDF.type, ECSDI.Pedir_plan_viaje))
-        activ_g.add((ac_content, ECSDI.Destino, Literal(destino)))
-        activ_g.add((ac_content, ECSDI.Data_Ini, Literal(data_ini)))
-        activ_g.add((ac_content, ECSDI.Data_Fi, Literal(data_fi)))
-        activ_g.add((ac_content, ECSDI.Presupuesto, Literal(presupuesto, datatype=XSD.integer)))
-
-        deg_a = build_message(activ_g,
-                            ACL.request,
-                            sender=AgenteOrganizador.uri,
-                            msgcnt=mss_cnt,
-                            content=ac_content)
-        ac_res = send_message(deg_a, activ_addr)
-        ac_m = get_message_properties(ac_res)
-        ac_cont = ac_m['content']
-        actividades = ac_res.value(subject=ac_cont, predicate=ECSDI.actividades)
+        #results
+        print(transport_name.value, transport_price.value)
+        print(alojam_name.value, alojam_price.value, alojam_estrellas.value)
+        print(actividades_result.value)
 
         # Construimos la respuesta
         res_g = Graph()
         res_content = ECSDI['Pedir_plan_viaje']
         res_g.add((res_content, RDF.type, ECSDI.Pedir_plan_viaje))
-        res_g.add((res_content, ECSDI.transport, Literal(transport_name)))
-        res_g.add((res_content, ECSDI.transport_precio, Literal(transport_price)))
-        res_g.add((res_content, ECSDI.alojamiento, Literal(alojam_name)))
-        res_g.add((res_content, ECSDI.aloj_precio, Literal(alojam_price)))
-        res_g.add((res_content, ECSDI.aloj_estrellas, Literal(alojam_estrellas)))
-        res_g.add((res_content, ECSDI.actividades, Literal(actividades)))
+        res_g.add((res_content, ECSDI.transport, Literal(transport_name.value)))
+        res_g.add((res_content, ECSDI.transport_precio, Literal(transport_price.value)))
+        res_g.add((res_content, ECSDI.alojamiento, Literal(alojam_name.value)))
+        res_g.add((res_content, ECSDI.aloj_precio, Literal(alojam_price.value)))
+        res_g.add((res_content, ECSDI.aloj_estrellas, Literal(alojam_estrellas.value)))
+        res_g.add((res_content, ECSDI.actividades, Literal(actividades_result.value)))
         gr = build_message(res_g,
                             ACL['inform'],
                             sender=AgenteOrganizador.uri,
@@ -381,6 +395,32 @@ def pedir_alojamiento(destino, data_ini, data_fi, pref_Alojamientos, min_estrell
             aloj_stars = aj_res.value(subject=medio_t, predicate=ECSDI.Estrellas).toPython()
             return aloj_name, aloj_price, aloj_stars
     return None, None, None
+
+def pedir_actividades(destino, data_ini, data_fi, presupuesto) :
+
+    gr_a = find_agent_info(DSO.GestorActividades)
+    msg_a = gr_a.value(predicate=RDF.type, object=ACL.FipaAclMessage)
+    content_a = gr_a.value(subject=msg_a, predicate=ACL.content)
+    activ_addr = gr_a.value(subject=content_a, predicate=DSO.Address)
+    
+    activ_g = Graph()
+    ac_content = ECSDI['Pedir_plan_viaje']
+    activ_g.add((ac_content, RDF.type, ECSDI.Pedir_plan_viaje))
+    activ_g.add((ac_content, ECSDI.Destino, Literal(destino)))
+    activ_g.add((ac_content, ECSDI.Data_Ini, Literal(data_ini)))
+    activ_g.add((ac_content, ECSDI.Data_Fi, Literal(data_fi)))
+    activ_g.add((ac_content, ECSDI.Presupuesto, Literal(presupuesto, datatype=XSD.integer)))
+
+    deg_a = build_message(activ_g,
+                        ACL.request,
+                        sender=AgenteOrganizador.uri,
+                        msgcnt=mss_cnt,
+                        content=ac_content)
+    ac_res = send_message(deg_a, activ_addr)
+    ac_m = get_message_properties(ac_res)
+    ac_cont = ac_m['content']
+    return ac_res.value(subject=ac_cont, predicate=ECSDI.actividades)
+
 
 def tidyup():
     """

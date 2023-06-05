@@ -207,7 +207,6 @@ def hacer_plan():
         if 'tp_plane' in request.form: pref_trans.append('plane')
         if 'tp_train' in request.form: pref_trans.append('train')
         if 'tp_ferry' in request.form: pref_trans.append('ferry')
-        
         pref_aloj = []
         if 'al_hotel' in request.form: pref_aloj.append('hotel')
         if 'al_apartamento' in request.form: pref_aloj.append('apartamento')
