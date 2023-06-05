@@ -4,26 +4,22 @@
 
 ## Port Assigning
 
-- DirectoryAgent: 9000
+- SimpleDirectoryAgent: 9000
 
-- AgentePersonal: 9001
+- PersonalAgent: 9001
 
 > Los agentes internos utilizaran el prefijo 901x
 
-- Organizador: 9010
-- GestorTransporte: 9011
-- _GestorAlojamiento: 9012_
-- _GestorActividades: 9013_
-  ...
+- AOrganizador: 9010
+- AGestorTransporte: 9011
+- AGestorAlojamiento: 9012
+- AGestorActividades: 9013
 
 > Los agentes externos utilizaran el prefijo 905x
 
 - AgenciaTransporte: 9050
-- _AgenciaAlojamiento: 9051_
-- _AgenciaActividades: 9052_
-- _AgenciaTiempo: 9053_
-
-> Los Agentes marcados en cursiva estan pendientes de implementacion y sujetos a cambios
+- AgenciaAlojamiento: 9051
+- AgenciaActividades: 9052
 
 ## Usage
 
@@ -36,13 +32,12 @@ To execute the program use the following commands in order:
 
   python AOrganizador.py
   python AGestorTransporte.py
-  *python AGestorAlojamiento.py
-  *python AGestorActividades.py
+  python AGestorAlojamiento.py
+  python AGestorActividades.py
 
   python AgenciaTransporte.py
-  *python AgenciaAlojamiento.py
-  *python AgenciaActividades.py
-  *python AgenciaTiempo.py
+  python AgenciaAlojamiento.py
+  python AgenciaActividades.py
 
   python PersonalAgent.py
 ```
