@@ -262,7 +262,6 @@ def comunicacion():
         min_estrellas = eval(gm.value(subject=content, predicate=ECSDI.Estrellas))
 
         if (data_fi < data_ini):
-            print("invalid date")
             error_graph = Graph()
             res_content = ECSDI['Pedir_plan_viaje']
             mensaje_error = "Las fechas seleccionadas son inválidas."
@@ -301,11 +300,39 @@ def comunicacion():
         transport_process.join()
         alojamiento_process.join()
         actividades_process.join()
+        
+        
+        if (transport_name.value == 'NONE' or alojam_name.value == 'NONE'):
+            error_graph = Graph()
+            res_content = ECSDI['Pedir_plan_viaje']
+            mensaje_error = "No hay medios de transporte o alojamientos disponibles."
+            error_graph.add((res_content, RDF.type, ECSDI.Pedir_plan_viaje))
+            error_graph.add((res_content, ECSDI.mensaje_error, Literal(mensaje_error)))
+            gr = build_message(error_graph,
+                            ACL['inform'],
+                            sender=AgenteOrganizador.uri,
+                            msgcnt=mss_cnt,
+                            receiver=msgdic['sender'],
+                            content=res_content)
 
-        #results
-        print(transport_name.value, transport_price.value)
-        print(alojam_name.value, alojam_price.value, alojam_estrellas.value)
-        print(actividades_result.value)
+            mss_cnt += 1
+            return gr.serialize(format='xml')
+        
+        if (transport_price.value + alojam_price.value > presupuesto.toPython()):
+            error_graph = Graph()
+            res_content = ECSDI['Pedir_plan_viaje']
+            mensaje_error = "No se encontraron planes de viaje que cumplieran con el presupuesto establecido."
+            error_graph.add((res_content, RDF.type, ECSDI.Pedir_plan_viaje))
+            error_graph.add((res_content, ECSDI.mensaje_error, Literal(mensaje_error)))
+            gr = build_message(error_graph,
+                            ACL['inform'],
+                            sender=AgenteOrganizador.uri,
+                            msgcnt=mss_cnt,
+                            receiver=msgdic['sender'],
+                            content=res_content)
+
+            mss_cnt += 1
+            return gr.serialize(format='xml')
 
         # Construimos la respuesta
         res_g = Graph()
