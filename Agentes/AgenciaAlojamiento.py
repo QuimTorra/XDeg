@@ -76,6 +76,28 @@ AgenciaAlojamiento = Agent('AgenciaAlojamiento',
 
 mss_cnt = 0
 
+ontologyFile = open('../data/Alojamiento_BD.rdf')
+fuente_Datos = Graph()
+fuente_Datos = fuente_Datos.parse(ontologyFile)
+
+#CHECKOUT DATABASE
+# print('######')
+# for alojamiento in fuente_Datos.subjects(RDF.type, ECSDI.Alojamiento):
+#     print(fuente_Datos.value(subject=alojamiento, predicate=ECSDI.Pertenece_a),
+#           fuente_Datos.value(subject=fuente_Datos.value(subject=alojamiento, predicate=ECSDI.Pertenece_a), predicate=ECSDI.Nombre),
+#           fuente_Datos.value(subject=alojamiento, predicate=ECSDI.Nombre),
+#           fuente_Datos.value(subject=alojamiento, predicate=ECSDI.Precio),
+#           fuente_Datos.value(subject=alojamiento, predicate=ECSDI.Estrellas))
+# print('######')
+
+
+def get_count():
+    global mss_cnt
+    if not mss_cnt:
+        mss_cnt = 0
+    mss_cnt += 1
+    return mss_cnt
+    
 def register_message():
     """
     Envia un mensaje de registro al servicio de registro
@@ -135,25 +157,37 @@ def getAlojamiento():
   accion = gm.value(subject=content, predicate=RDF.type)
   if accion == ECSDI.Pedir_plan_viaje:        
     destino = gm.value(subject=content, predicate=ECSDI.Destino)
-    gente = gm.value(subject=content, predicate=ECSDI.Gente)
     data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
     data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
-    presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
 
-    estrelles = random.randint(1,5)
-    preu = random.randint(30, 400)
-    allotjament = (["hotel", "apartamento", "casa rural", "camping", "casa de tu madre", "bajo un puente", "deg"])[random.randint(0,6)]
+    grespuesta = Graph()
+    contentResult = ECSDI['Cerca_Alojamiento_' + str(get_count())]
+    for alojamiento in fuente_Datos.subjects(RDF.type, ECSDI.Alojamiento):
+        id_destino = fuente_Datos.value(subject=alojamiento, predicate=ECSDI.Pertenece_a)
 
-    g = Graph()
-    content = ECSDI['Pedir_plan_viaje']
-    g.add((content, ECSDI.alojamiento, Literal(allotjament)))
-    g.add((content, ECSDI.precio_aloj, Literal(preu, datatype=XSD.integer)))
-    g.add((content, ECSDI.estrellas_aloj, Literal(estrelles, datatype=XSD.integer)))
-    gr = build_message(g,
+        #Metodo transporte hacia el destiono
+        if fuente_Datos.value(subject=id_destino, predicate=ECSDI.Nombre) == destino:
+            name_aloj = fuente_Datos.value(subject=alojamiento, predicate=ECSDI.Nombre)
+            price_aloj = fuente_Datos.value(subject=alojamiento, predicate=ECSDI.Precio)
+            star_aloj = fuente_Datos.value(subject=alojamiento, predicate=ECSDI.Estrellas)
+
+            alojamiento_ciudad = ECSDI['Alojamiento_'+ str(get_count())]
+            grespuesta.add((alojamiento_ciudad, RDF.type, ECSDI.Alojamiento))
+            grespuesta.add((alojamiento_ciudad, ECSDI.Nombre, Literal(name_aloj, datatype=XSD.string)))
+            grespuesta.add((alojamiento_ciudad, ECSDI.Precio, Literal(price_aloj, datatype=XSD.integer)))
+            grespuesta.add((alojamiento_ciudad, ECSDI.Estrellas, Literal(star_aloj, datatype=XSD.integer)))
+    
+    print("#### RESULTADO QUERY ####")
+    for alojamiento in grespuesta.subjects(RDF.type, ECSDI.Alojamiento):
+        print(grespuesta.value(subject=alojamiento, predicate=ECSDI.Nombre),
+            grespuesta.value(subject=alojamiento, predicate=ECSDI.Precio),
+            grespuesta.value(subject=alojamiento, predicate=ECSDI.Estrellas))
+
+    gr = build_message(grespuesta,
                     ACL['inform'],
                     sender=AgenciaAlojamiento.uri,
-                    content=content).serialize(format='xml')
-
+                    content=Literal('OPTIONS AVAILABLE')).serialize(format='xml')
+    
   else:  
     gr = build_message(Graph(),
                         ACL['inform'],

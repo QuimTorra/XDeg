@@ -207,6 +207,8 @@ def hacer_plan():
         if 'tp_plane' in request.form: pref_trans.append('plane')
         if 'tp_train' in request.form: pref_trans.append('train')
         if 'tp_ferry' in request.form: pref_trans.append('ferry')
+        pref_aloj = ['hotel', 'apartamento', 'casa rural', 'camping', 'deg']
+        estrellas = 3
 
         #Peticion Viaje
         gr = Graph()
@@ -218,6 +220,8 @@ def hacer_plan():
         gr.add((contentResult, ECSDI.Data_Fi, Literal(date_Fi, datatype=XSD.date)))
         gr.add((contentResult, ECSDI.Presupuesto, Literal(presupost, datatype=XSD.integer)))
         gr.add((contentResult, ECSDI.Preferencias_Medio_Transporte, Literal(str(pref_trans), datatype=XSD.string)))
+        gr.add((contentResult, ECSDI.Preferencias_Alojamiento, Literal(str(pref_aloj), datatype=XSD.string)))
+        gr.add((contentResult, ECSDI.Estrellas, Literal(estrellas, datatype=XSD.integer)))
         
 
         deg = build_message(gr,
@@ -230,16 +234,17 @@ def hacer_plan():
         msgdic = get_message_properties(rr)
         res_content = msgdic['content']
         transport = rr.value(subject=res_content, predicate=ECSDI.transport)
+        transport_price = rr.value(subject=res_content, predicate=ECSDI.transport_precio)
         alojamiento = rr.value(subject=res_content, predicate=ECSDI.alojamiento)
         aloj_precio = rr.value(subject=res_content, predicate=ECSDI.aloj_precio)
         aloj_estrellas = rr.value(subject=res_content, predicate=ECSDI.aloj_estrellas)
-        print(alojamiento, aloj_precio, aloj_estrellas)
+        tp_view = transport + ' : ' + transport_price + '€' 
         aloj_view = alojamiento + ' (' + ('⭐'*int(aloj_estrellas)) + ')' + " : " + aloj_precio + '€'
         actividades = rr.value(subject=res_content, predicate=ECSDI.actividades)
     
 
         #Plan result
-        return render_template('rplan.html', transport=transport, alojamiento=aloj_view, actividades=actividades)
+        return render_template('rplan.html', transport=tp_view, alojamiento=aloj_view, actividades=actividades)
 
 
 
