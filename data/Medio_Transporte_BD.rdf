@@ -1,0 +1,70 @@
+@prefix ns1: <http://www.owl-ontologies.com/ECSDI_XDeg.owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ns1:Medio_De_Transporte_1 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "bus"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_0 ;
+    ns1:Precio 50 .
+
+ns1:Medio_De_Transporte_10 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "plane"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_3 ;
+    ns1:Precio 235 .
+
+ns1:Medio_De_Transporte_11 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "train"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_3 ;
+    ns1:Precio 85 .
+
+ns1:Medio_De_Transporte_2 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "plane"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_0 ;
+    ns1:Precio 150 .
+
+ns1:Medio_De_Transporte_3 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "train"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_0 ;
+    ns1:Precio 75 .
+
+ns1:Medio_De_Transporte_4 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "ferry"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_0 ;
+    ns1:Precio 120 .
+
+ns1:Medio_De_Transporte_5 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "plane"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_1 ;
+    ns1:Precio 275 .
+
+ns1:Medio_De_Transporte_6 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "bus"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_1 ;
+    ns1:Precio 70 .
+
+ns1:Medio_De_Transporte_7 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "train"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_1 ;
+    ns1:Precio 40 .
+
+ns1:Medio_De_Transporte_8 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "plane"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_2 ;
+    ns1:Precio 240 .
+
+ns1:Medio_De_Transporte_9 a ns1:Medio_De_Transporte ;
+    ns1:Nombre "ferry"^^xsd:string ;
+    ns1:Pertenece_a ns1:Destino_2 ;
+    ns1:Precio 120 .
+
+ns1:Destino_2 a ns1:Destino ;
+    ns1:Nombre "london"^^xsd:string .
+
+ns1:Destino_3 a ns1:Destino ;
+    ns1:Nombre "rome"^^xsd:string .
+
+ns1:Destino_1 a ns1:Destino ;
+    ns1:Nombre "paris"^^xsd:string .
+
+ns1:Destino_0 a ns1:Destino ;
+    ns1:Nombre "barcelona"^^xsd:string .
+
