@@ -263,6 +263,11 @@ def comunicacion():
                             msgcnt=mss_cnt,
                             content=tp_content)
         tp_res = send_message(deg, trans_addr)
+
+        for s, o, p in tp_res:
+            print(s, o, p)
+
+
         tp_m = get_message_properties(tp_res)
         transport = tp_m['content']
         logger.info("Transport: %s", transport)

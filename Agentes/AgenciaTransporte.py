@@ -6,7 +6,7 @@ from flask import Flask, request, Response
 from flask.json import jsonify
 import json
 import argparse
-from rdflib import FOAF, RDF, Graph, Literal, Namespace
+from rdflib import FOAF, RDF, Graph, Literal, Namespace, XSD
 import requests
 import logging
 from requests import ConnectionError
@@ -88,6 +88,12 @@ fuente_Datos = fuente_Datos.parse(ontologyFile)
 #           fuente_Datos.value(subject=medio_t, predicate=ECSDI.Nombre),
 #           fuente_Datos.value(subject=medio_t, predicate=ECSDI.Precio))
 # print('######')
+def get_count():
+    global mss_cnt
+    if not mss_cnt:
+        mss_cnt = 0
+    mss_cnt += 1
+    return mss_cnt
 
 def register_message():
     """
@@ -146,24 +152,38 @@ def getTransport():
 
   #accion (La peticion es valida)
   accion = gm.value(subject=content, predicate=RDF.type)
-  if accion == ECSDI.Pedir_plan_viaje:        
+  if accion == ECSDI.Pedir_metodo_transporte:        
     destino = gm.value(subject=content, predicate=ECSDI.Destino)
     data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
     data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
-    presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
-    pref_Transportes = eval(gm.value(subject=content, predicate=ECSDI.Preferencias_Medio_Transporte))
 
-    if len(pref_Transportes) != 0 : 
-      res = pref_Transportes[random.randint(0, len(pref_Transportes)-1)]
-      gr = build_message(Graph(),
-                        ACL['inform'],
-                        sender=AgenciaTransporte.uri,
-                        content=Literal(res)).serialize(format='xml')
-    else:  
-      gr = build_message(Graph(),
-                          ACL['inform'],
-                          sender=AgenciaTransporte.uri,
-                          content=Literal("NO OPTIONS AVAILABLE")).serialize(format='xml')
+    grespuesta = Graph()
+    contentResult = ECSDI['Cerca_productes_' + str(get_count())]
+    #OBTAIN FROM DATABASE
+    for medio_t in fuente_Datos.subjects(RDF.type, ECSDI.Medio_De_Transporte):
+        id_destino = fuente_Datos.value(subject=medio_t, predicate=ECSDI.Pertenece_a)
+
+        #Metodo transporte hacia el destiono
+        if fuente_Datos.value(subject=id_destino, predicate=ECSDI.Nombre) == destino:
+            price_trans = fuente_Datos.value(subject=medio_t, predicate=ECSDI.Precio)
+            name_trans = fuente_Datos.value(subject=medio_t, predicate=ECSDI.Nombre)
+
+            medio_trans_ciudad = ECSDI['Medio_De_Transporte_'+ str(get_count())]
+            grespuesta.add((medio_trans_ciudad, RDF.type, ECSDI.Medio_De_Transporte))
+            grespuesta.add((medio_trans_ciudad, ECSDI.Nombre, Literal(name_trans, datatype=XSD.string)))
+            grespuesta.add((medio_trans_ciudad, ECSDI.Precio, Literal(price_trans, datatype=XSD.integer)))
+    
+    print("#### RESULTADO QUERY ####")
+    for medio_t in grespuesta.subjects(RDF.type, ECSDI.Medio_De_Transporte):
+        print(destino,
+            grespuesta.value(subject=medio_t, predicate=ECSDI.Nombre),
+            grespuesta.value(subject=medio_t, predicate=ECSDI.Precio))
+
+    gr = build_message(grespuesta,
+                    ACL['inform'],
+                    sender=AgenciaTransporte.uri,
+                    content=Literal('OPTIONS AVAILABLE')).serialize(format='xml')
+    
   else:  
     gr = build_message(Graph(),
                         ACL['inform'],
