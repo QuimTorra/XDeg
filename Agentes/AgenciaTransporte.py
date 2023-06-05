@@ -76,6 +76,19 @@ AgenciaTransporte = Agent('AgenciaTransporte',
 
 mss_cnt = 0
 
+ontologyFile = open('../data/Medio_Transporte_BD.rdf')
+fuente_Datos = Graph()
+fuente_Datos = fuente_Datos.parse(ontologyFile)
+
+#CHECKOUT DATABASE
+# print('######')
+# for medio_t in fuente_Datos.subjects(RDF.type, ECSDI.Medio_De_Transporte):
+#     print(fuente_Datos.value(subject=medio_t, predicate=ECSDI.Pertenece_a),
+#           fuente_Datos.value(subject=fuente_Datos.value(subject=medio_t, predicate=ECSDI.Pertenece_a), predicate=ECSDI.Nombre),
+#           fuente_Datos.value(subject=medio_t, predicate=ECSDI.Nombre),
+#           fuente_Datos.value(subject=medio_t, predicate=ECSDI.Precio))
+# print('######')
+
 def register_message():
     """
     Envia un mensaje de registro al servicio de registro

@@ -1,4 +1,4 @@
-@prefix ns1: <http://www.owl-ontologies.com/ECSDI_XDeg.owl#> .
+@prefix ns1: <http://www.owl-ontologies.com/ECSDI_2023.owl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 ns1:Medio_De_Transporte_1 a ns1:Medio_De_Transporte ;

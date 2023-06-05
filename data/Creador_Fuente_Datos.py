@@ -6,8 +6,10 @@ import argparse
 from flask import Flask, render_template, request
 from rdflib import Graph, Literal, Namespace, XSD, URIRef
 from rdflib.namespace import FOAF, RDF
+import sys
+sys.path.insert(1, '../Agentes')
+from AgentUtil.OntoNamespaces import ECSDI
 
-ECSDI = Namespace("http://www.owl-ontologies.com/ECSDI_XDeg.owl#")
 
 gr = Graph()
 bar_con = "Barcelona"
@@ -119,12 +121,13 @@ for medio_t in gr.subjects(RDF.type, ECSDI.Medio_De_Transporte):
 gr.serialize('Medio_Transporte_BD.rdf')
 
 ontologyFile = open('./Medio_Transporte_BD.rdf')
-gm = gr.parse(ontologyFile)
+gm = Graph()
+gm = gm.parse(ontologyFile)
 
 print('######')
 
 for medio_t in gm.subjects(RDF.type, ECSDI.Medio_De_Transporte):
     print(gm.value(subject=medio_t, predicate=ECSDI.Pertenece_a),
-          gm.value(subject=gr.value(subject=medio_t, predicate=ECSDI.Pertenece_a), predicate=ECSDI.Nombre),
+          gm.value(subject=gm.value(subject=medio_t, predicate=ECSDI.Pertenece_a), predicate=ECSDI.Nombre),
           gm.value(subject=medio_t, predicate=ECSDI.Nombre),
           gm.value(subject=medio_t, predicate=ECSDI.Precio))
