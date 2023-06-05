@@ -15,7 +15,7 @@ import argparse
 
 from flask import Flask, request
 from rdflib import Graph, Namespace, Literal
-from rdflib.namespace import FOAF, RDF
+from rdflib.namespace import FOAF, RDF, XSD
 import requests
 
 from AgentUtil.ACL import ACL
@@ -226,18 +226,15 @@ def comunicacion():
                 destino = gm.value(subject=content, predicate=ECSDI.Destino)
                 data_ini = gm.value(subject=content, predicate=ECSDI.Data_Ini)
                 data_fi = gm.value(subject=content, predicate=ECSDI.Data_Fi)
-                presupuesto = gm.value(subject=content, predicate=ECSDI.Presupuesto)
                 pref_Transportes = eval(gm.value(subject=content, predicate=ECSDI.Preferencias_Medio_Transporte))
 
                 address = 'http://%s:%d/transport' % (ahostname, aport)
                 gg = Graph()
-                tp_content = ECSDI['Pedir_plan_viaje']
-                gg.add((tp_content, RDF.type, ECSDI.Pedir_plan_viaje))
+                tp_content = ECSDI['Pedir_metodo_transporte']
+                gg.add((tp_content, RDF.type, ECSDI.Pedir_metodo_transporte))
                 gg.add((tp_content, ECSDI.Destino, Literal(destino)))
                 gg.add((tp_content, ECSDI.Data_Ini, Literal(data_ini)))
                 gg.add((tp_content, ECSDI.Data_Fi, Literal(data_fi)))
-                gg.add((tp_content, ECSDI.Presupuesto, Literal(presupuesto)))
-                gg.add((tp_content, ECSDI.Preferencias_Medio_Transporte, Literal(pref_Transportes)))
                 deg = build_message(gg,
                                   ACL.request,
                                   sender=GestorTransporte.uri,
@@ -247,11 +244,40 @@ def comunicacion():
                 rm = get_message_properties(r)
                 transport = rm['content']
 
-                gr = Graph()
-                gr = build_message(Graph(),
+                if transport.toPython() == "OPTIONS AVAILABLE":
+                    lowest_price = 10000000
+                    
+                    #search for best price
+                    for medio_t in r.subjects(RDF.type, ECSDI.Medio_De_Transporte):
+                        
+                        if lowest_price > r.value(subject=medio_t, predicate=ECSDI.Precio).toPython() and r.value(subject=medio_t, predicate=ECSDI.Nombre).toPython() in pref_Transportes:
+                            lowest_subject = medio_t
+                            lowest_name = r.value(subject=medio_t, predicate=ECSDI.Nombre)
+                            lowest_price = r.value(subject=medio_t, predicate=ECSDI.Precio).toPython()
+                    
+                    grespuesta = Graph()
+                    grespuesta.add((lowest_subject, RDF.type, ECSDI.Medio_De_Transporte))
+                    grespuesta.add((lowest_subject, ECSDI.Nombre, Literal(lowest_name, datatype=XSD.string)))
+                    grespuesta.add((lowest_subject, ECSDI.Precio, Literal(lowest_price, datatype=XSD.integer)))
+
+                    print("#### RESULTADO QUERY ####")
+                    for medio_t in grespuesta.subjects(RDF.type, ECSDI.Medio_De_Transporte):
+                        print(destino,
+                            grespuesta.value(subject=medio_t, predicate=ECSDI.Nombre),
+                            grespuesta.value(subject=medio_t, predicate=ECSDI.Precio))
+                    
+                    #SEND BEST OPTION CALCULATED
+                    gr = Graph()
+                    gr = build_message(grespuesta,
+                            ACL['inform'],
+                            sender=GestorTransporte.uri,
+                            content=transport).serialize(format='xml')
+                else:
+                    gr = build_message(Graph(),
                         ACL['inform'],
                         sender=GestorTransporte.uri,
-                        content=transport).serialize(format='xml')
+                        content=Literal("NO OPTIONS AVAILABLE")).serialize(format='xml')
+
             else:
                 gr = build_message(Graph(),
                         ACL['inform'],
@@ -259,7 +285,6 @@ def comunicacion():
                         content=Literal("NO ENTIENDO")).serialize(format='xml')
 
     mss_cnt += 1
-
 
     logger.info('Respondemos a la peticion')
 
