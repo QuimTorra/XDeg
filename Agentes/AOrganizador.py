@@ -245,6 +245,23 @@ def comunicacion():
         pref_Alojamientos = eval(gm.value(subject=content, predicate=ECSDI.Preferencias_Alojamiento))
         min_estrellas = eval(gm.value(subject=content, predicate=ECSDI.Estrellas))
 
+        if (data_fi < data_ini):
+            print("invalid date")
+            error_graph = Graph()
+            res_content = ECSDI['Pedir_plan_viaje']
+            mensaje_error = "Las fechas seleccionadas son inválidas."
+            error_graph.add((res_content, RDF.type, ECSDI.Pedir_plan_viaje))
+            error_graph.add((res_content, ECSDI.mensaje_error, Literal(mensaje_error)))
+            gr = build_message(error_graph,
+                            ACL['inform'],
+                            sender=AgenteOrganizador.uri,
+                            msgcnt=mss_cnt,
+                            receiver=msgdic['sender'],
+                            content=res_content)
+
+            mss_cnt += 1
+            return gr.serialize(format='xml')
+
         # Buscamos Transporte
         transport_name, transport_price = pedir_transporte(destino, data_ini, data_fi, pref_Transportes)
 
@@ -373,7 +390,6 @@ def tidyup():
     global cola1
     cola1.put(0)
 
-
 def agentbehavior1(cola):
     """
     Un comportamiento del agente
@@ -393,8 +409,6 @@ def agentbehavior1(cola):
             fin = True
         else:
             print(v)
-
-
 
 if __name__ == '__main__':
     # Ponemos en marcha los behaviors

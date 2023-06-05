@@ -196,7 +196,7 @@ def hacer_plan():
         res_content = gr.value(subject=msg, predicate=ACL.content)
         ragn_addr = gr.value(subject=res_content, predicate=DSO.Address)
 
-        #GET INFO FORM
+        # GET INFO FORM
         destination = request.form['tp_destination']
         people = request.form['tp_people']
         date_Ini = request.form['dateIni']
@@ -210,7 +210,7 @@ def hacer_plan():
         pref_aloj = ['hotel', 'apartamento', 'casa rural', 'camping', 'deg']
         estrellas = 3
 
-        #Peticion Viaje
+        # Peticion Viaje
         gr = Graph()
         contentResult = ECSDI['Pedir_plan_viaje_'+ str(get_count())]
         gr.add((contentResult, RDF.type, ECSDI.Pedir_plan_viaje))
@@ -233,17 +233,22 @@ def hacer_plan():
         rr = send_message(deg, ragn_addr)
         msgdic = get_message_properties(rr)
         res_content = msgdic['content']
+        mensaje_error = rr.value(subject=res_content, predicate=ECSDI.mensaje_error)
         transport = rr.value(subject=res_content, predicate=ECSDI.transport)
         transport_price = rr.value(subject=res_content, predicate=ECSDI.transport_precio)
         alojamiento = rr.value(subject=res_content, predicate=ECSDI.alojamiento)
         aloj_precio = rr.value(subject=res_content, predicate=ECSDI.aloj_precio)
         aloj_estrellas = rr.value(subject=res_content, predicate=ECSDI.aloj_estrellas)
+        actividades = rr.value(subject=res_content, predicate=ECSDI.actividades)
+
+        print(mensaje_error)
+        if (mensaje_error):
+            return render_template('rerror.html', msg=mensaje_error)
+
         tp_view = transport + ' : ' + transport_price + '€' 
         aloj_view = alojamiento + ' (' + ('⭐'*int(aloj_estrellas)) + ')' + " : " + aloj_precio + '€'
-        actividades = rr.value(subject=res_content, predicate=ECSDI.actividades)
-    
 
-        #Plan result
+        # Plan result
         return render_template('rplan.html', transport=tp_view, alojamiento=aloj_view, actividades=actividades)
 
 
